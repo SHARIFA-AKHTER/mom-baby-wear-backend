@@ -2,8 +2,8 @@ import { Request, Response } from 'express';
 import { orderService } from './order.service';
 
 
-class OrderController {
-createOrder = async (req: Request, res: Response) => {
+
+const createOrder = async (req: Request, res: Response) => {
 const userId = req.user?.id!;
 
 
@@ -18,7 +18,7 @@ data: result,
 };
 
 
-getAllOrders = async (_req: Request, res: Response) => {
+const getAllOrders = async (_req: Request, res: Response) => {
 const result = await orderService.getAllOrders();
 
 
@@ -30,7 +30,7 @@ data: result,
 };
 
 
-getSingleOrder = async (req: Request, res: Response) => {
+const getSingleOrder = async (req: Request, res: Response) => {
 const { id } = req.params;
 const result = await orderService.getSingleOrder(id);
 
@@ -43,7 +43,7 @@ data: result,
 };
 
 
-updateOrderStatus = async (req: Request, res: Response) => {
+const updateOrderStatus = async (req: Request, res: Response) => {
 const { id } = req.params;
 const { status } = req.body;
 
@@ -59,7 +59,7 @@ data: result,
 };
 
 
-deleteOrder = async (req: Request, res: Response) => {
+const deleteOrder = async (req: Request, res: Response) => {
 const { id } = req.params;
 const result = await orderService.deleteOrder(id);
 
@@ -70,7 +70,13 @@ message: 'Order deleted successfully',
 data: result,
 });
 };
+
+
+
+export const orderController = {
+createOrder,
+getAllOrders,
+getSingleOrder,
+updateOrderStatus,
+ deleteOrder
 }
-
-
-export const orderController = new OrderController();
