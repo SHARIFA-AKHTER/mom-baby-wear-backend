@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
-import * as service from './auth.service';
+import * as authService from './auth.service';
 import { catchAsync } from '../../utils/catchAsync';
 import { sendResponse } from '../../utils/sendResponse';
 
-
 export const register = catchAsync(async (req: Request, res: Response) => {
-const { user, token } = await service.registerUser(req.body);
-sendResponse(res, { user, token }, 'Registered', 201);
+  const result = await authService.registerUser(req.body);
+
+  return sendResponse(res, 201, true, "Registered successfully", result);
 });
 
-
 export const login = catchAsync(async (req: Request, res: Response) => {
-const { user, token } = await service.loginUser(req.body);
-sendResponse(res, { user, token }, 'Login success');
+  const result = await authService.loginUser(req.body);
+
+  return sendResponse(res, 200, true, "Login success", result);
 });

@@ -3,7 +3,7 @@ import express from "express";
 import { createProductSchema } from "./product.validation";
 
 import { validateRequest } from "../../middleware/validateRequest";
-import { productController } from "./products.controller";
+import { productController } from "./product.controller";
 
 
 const router = express.Router();

@@ -1,4 +1,3 @@
-
 import { Response } from "express";
 
 export const sendResponse = <T>(
@@ -8,7 +7,7 @@ export const sendResponse = <T>(
   message: string,
   data: T
 ) => {
-  res.status(statusCode).json({
+  return res.status(statusCode).json({
     success,
     message,
     data,
