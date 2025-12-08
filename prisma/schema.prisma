@@ -6,23 +6,30 @@
 
 generator client {
   provider = "prisma-client-js"
- 
 }
 
 datasource db {
   provider = "postgresql"
- 
 }
+
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  name      String?
-  password  String
-  role      Role     @default(CUSTOMER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  orders    Order[]
-  reviews   Review[]
+  id                 String     @id @default(uuid())
+  email              String     @unique
+  name               String?
+  password           String
+  role               Role       @default(CUSTOMER)
+  status             UserStatus @default(ACTIVE)
+  needPasswordChange Boolean    @default(false)
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+  orders             Order[]
+  reviews            Review[]
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  BANNED
 }
 
 enum Role {
@@ -55,13 +62,13 @@ model Product {
 }
 
 model Order {
-  id        String       @id @default(uuid())
+  id        String      @id @default(uuid())
   userId    String
-  user      User         @relation(fields: [userId], references: [id])
-  status    OrderStatus  @default(PENDING)
+  user      User        @relation(fields: [userId], references: [id])
+  status    OrderStatus @default(PENDING)
   total     Float
   items     Json
-  createdAt DateTime     @default(now())
+  createdAt DateTime    @default(now())
 }
 
 enum OrderStatus {

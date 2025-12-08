@@ -1,16 +1,90 @@
-import { Request, Response } from 'express';
-import * as authService from './auth.service';
-import { catchAsync } from '../../utils/catchAsync';
-import { sendResponse } from '../../utils/sendResponse';
 
-export const register = catchAsync(async (req: Request, res: Response) => {
-  const result = await authService.registerUser(req.body);
+import { Request, Response } from "express";
+import { AuthService } from "./auth.service";
+import { catchAsync } from "../../utils/catchAsync";
+import { sendResponse } from "../../utils/sendResponse";
 
-  return sendResponse(res, 201, true, "Registered successfully", result);
+const register = catchAsync(async (req: Request, res: Response) => {
+  const result = await AuthService.registerUser(req.body);
+
+  res.cookie("accessToken", result.token, {
+    secure: true,
+    httpOnly: true,
+    sameSite: "none",
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+  });
+
+  sendResponse(
+    res,
+    200,
+    true,
+    "Registered successfully",
+    { needPasswordChange: result.user.needPasswordChange }
+  );
 });
 
-export const login = catchAsync(async (req: Request, res: Response) => {
-  const result = await authService.loginUser(req.body);
+const login = catchAsync(async (req: Request, res: Response) => {
+  const result = await AuthService.loginUser(req.body);
 
-  return sendResponse(res, 200, true, "Login success", result);
+  res.cookie("accessToken", result.accessToken, {
+    secure: true,
+    httpOnly: true,
+    sameSite: "none",
+    maxAge: 1000 * 60 * 60,
+  });
+
+  res.cookie("refreshToken", result.refreshToken, {
+    secure: true,
+    httpOnly: true,
+    sameSite: "none",
+    maxAge: 1000 * 60 * 60 * 24 * 90,
+  });
+
+  sendResponse(
+    res,
+    200,
+    true,
+    "Login successful",
+    { needPasswordChange: result.needPasswordChange }
+  );
 });
+
+const refreshToken = catchAsync(async (req: Request, res: Response) => {
+  const token = req.cookies.refreshToken;
+
+  const result = await AuthService.refreshToken(token);
+
+  res.cookie("accessToken", result.accessToken, {
+    secure: true,
+    httpOnly: true,
+    sameSite: "none",
+    maxAge: 1000 * 60 * 60,
+  });
+
+  sendResponse(
+    res,
+    200,
+    true,
+    "Access token refreshed successfully",
+    result
+  );
+});
+
+const changePassword = catchAsync(async (req: Request & { user?: any }, res: Response) => {
+  const result = await AuthService.changePassword(req.user, req.body);
+
+  sendResponse(
+    res,
+    200,
+    true,
+    "Password changed",
+    result
+  );
+});
+
+export const AuthController = {
+  register,
+  login,
+  refreshToken,
+  changePassword,
+};
