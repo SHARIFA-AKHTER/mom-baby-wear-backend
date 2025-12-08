@@ -15,6 +15,6 @@ router.get("/:id", usersController.getSingleUser);
 router.delete("/:id", usersController.deleteUser);
 
 
-export default router
+export const userRoutes = router
 
 

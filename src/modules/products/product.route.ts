@@ -16,4 +16,4 @@ router.patch("/:id", productController.updateProduct);
 router.delete("/:id", productController.deleteProduct);
 
 
-export default router;
+export const productRoutes = router
