@@ -1,24 +1,49 @@
 import express from 'express';
-
 import { createOrderValidation } from './order.validation';
 import { orderController } from './order.controller';
-
+import { authenticate, authorizeRoles } from '../../middleware/auth';
+import { validateRequest } from '../../middleware/validateRequest';
 
 const router = express.Router();
 
-
 router.post(
-'/',
-auth('CUSTOMER'),
-validateRequest(createOrderValidation),
-orderController.createOrder
+  '/',
+  authenticate,                
+  authorizeRoles('CUSTOMER'),     
+  validateRequest(createOrderValidation),
+  orderController.createOrder
 );
 
 
-router.get('/', auth('ADMIN', 'MANAGER'), orderController.getAllOrders);
-router.get('/:id', auth('ADMIN', 'CUSTOMER'), orderController.getSingleOrder);
-router.patch('/:id/status', auth('ADMIN', 'MANAGER'), orderController.updateOrderStatus);
-router.delete('/:id', auth('ADMIN'), orderController.deleteOrder);
+router.get(
+  '/',
+  authenticate,
+  authorizeRoles('ADMIN', 'MANAGER'),
+  orderController.getAllOrders
+);
 
+
+router.get(
+  '/:id',
+  authenticate,
+  authorizeRoles('ADMIN', 'CUSTOMER'),
+  orderController.getSingleOrder
+);
+
+
+router.patch(
+  '/:id/status',
+  authenticate,
+  authorizeRoles('ADMIN', 'MANAGER'),
+  orderController.updateOrderStatus
+);
+
+
+router.delete(
+  '/:id',
+  authenticate,
+  authorizeRoles('ADMIN'),
+  orderController.deleteOrder
+);
 
 export const OrderRoutes = router;
