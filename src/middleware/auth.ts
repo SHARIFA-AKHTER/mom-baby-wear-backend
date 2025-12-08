@@ -13,7 +13,7 @@ const authHeader = req.headers.authorization;
 if (!authHeader) return res.status(401).json({ success: false, message: 'Unauthorized' });
 const token = authHeader.split(' ')[1];
 try {
-const payload: any = jwt.verify(token, config.jwt_secret);
+const payload: any = jwt.verify(token, config.jwt.secret);
 const user = await prisma.user.findUnique({ where: { id: payload.id } });
 if (!user) return res.status(401).json({ success: false, message: 'User not found' });
 req.user = user;

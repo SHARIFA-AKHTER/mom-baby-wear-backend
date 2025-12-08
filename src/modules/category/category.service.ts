@@ -1,4 +1,5 @@
 
+
 import { prisma } from "../../app/shared/prisma";
 import { ICategory } from "./category.interface";
 
@@ -34,4 +35,4 @@ getCategories,
 getSingleCategory,
 updateCategory,
 deleteCategory,
-}
+};

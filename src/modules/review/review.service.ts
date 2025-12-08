@@ -1,9 +1,7 @@
 import { prisma } from "../../app/shared/prisma";
 
 
-class ReviewService {
-  // Create Review
-  async createReview(userId: string, payload: any) {
+const createReview = async (userId: string, payload: any)=> {
     const { productId, rating, comment } = payload;
 
     // Prevent multiple reviews by the same user
@@ -27,8 +25,8 @@ class ReviewService {
     return review;
   }
 
-  // Get product reviews
-  async getProductReviews(productId: string) {
+
+  const getProductReviews = (productId: string) =>{
     return prisma.review.findMany({
       where: { productId, approved: true },
       include: {
@@ -42,8 +40,8 @@ class ReviewService {
     });
   }
 
-  // Admin: Get all reviews
-  async getAllReviews() {
+
+  const getAllReviews = ()=> {
     return prisma.review.findMany({
       include: {
         user: true,
@@ -53,20 +51,25 @@ class ReviewService {
     });
   }
 
-  // Approve review (Admin)
-  async approveReview(id: string) {
+const approveReview = (id: string) =>{
     return prisma.review.update({
       where: { id },
       data: { approved: true },
     });
   }
 
-  // Delete a review
-  async deleteReview(id: string) {
+
+  const deleteReview = (id: string)=> {
     return prisma.review.delete({
       where: { id },
     });
   }
-}
 
-export const reviewService = new ReviewService();
+
+export const reviewService = {
+createReview,
+getProductReviews,
+getAllReviews,
+approveReview,
+deleteReview
+}
