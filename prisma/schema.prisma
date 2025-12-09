@@ -59,6 +59,8 @@ model Product {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   reviews     Review[]
+
+  stockLogs StockLog[]
 }
 
 model Order {
@@ -102,4 +104,30 @@ model Payment {
   transactionId String?
   status        String    @default("PENDING")
   createdAt     DateTime  @default(now())
+}
+
+model Coupon {
+  id            String   @id @default(uuid())
+  code          String   @unique
+  discountType  DiscountType
+  discountValue Float
+  expiry        DateTime
+  minOrderValue Float?
+  isActive      Boolean  @default(true)
+  usedBy        Json?     // store user IDs used coupon
+  createdAt     DateTime @default(now())
+}
+
+enum DiscountType {
+  PERCENT
+  FLAT
+}
+model StockLog {
+  id        String   @id @default(uuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+
+  change    Int      // +10 added stock, -1 order stock decrease
+  reason    String   // "ORDER", "RESTOCK", "CANCEL"
+  createdAt DateTime @default(now())
 }
