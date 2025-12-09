@@ -37,4 +37,4 @@ router.delete(
   CouponController.deleteCoupon
 );
 
-export default router;
+export const couponRoutes = router;
