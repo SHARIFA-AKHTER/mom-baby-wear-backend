@@ -24,6 +24,10 @@ model User {
   updatedAt          DateTime   @updatedAt
   orders             Order[]
   reviews            Review[]
+
+  carts Cart[]
+
+  wishlists Wishlist[]
 }
 
 enum UserStatus {
@@ -130,4 +134,23 @@ model StockLog {
   change    Int      // +10 added stock, -1 order stock decrease
   reason    String   // "ORDER", "RESTOCK", "CANCEL"
   createdAt DateTime @default(now())
+}
+
+
+model Cart {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  items     Json     // [{ productId, quantity }]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Wishlist {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  items     Json     // ["productId1", "productId2"]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
 }
