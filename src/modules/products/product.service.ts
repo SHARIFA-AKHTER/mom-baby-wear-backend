@@ -1,10 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+
+import { prisma } from "../../app/shared/prisma";
 import { IProduct } from "./product.interface";
-import { catchAsync } from "../../utils/catchAsync";
-
-
-
-const prisma = new PrismaClient();
 
 
 

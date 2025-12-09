@@ -12,7 +12,8 @@
     "types": ["node", "express"],
     "resolveJsonModule": true,
     "ignoreDeprecations": "6.0",
-     "typeRoots": ["./src/types", "./node_modules/@types"]
+     "typeRoots": ["./src/types", "./node_modules/@types"],
+   
   },
   "include": ["src", "src/types"],
   "exclude": ["node_modules"]

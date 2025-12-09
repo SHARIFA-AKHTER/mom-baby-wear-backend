@@ -9,6 +9,9 @@ import { PaymentRoutes } from "../../modules/payment/payment.route";
 import { couponRoutes } from "../../modules/coupon/coupon.routes";
 import { CartRoutes } from "../../modules/cart/cart.routes";
 import { InventoryRoutes } from "../../modules/inventory/inventory.routes";
+import { DashboardRoutes } from "../../modules/dashboard/dashboard.routes";
+import { AdminSettingsRoutes } from "../../modules/adminSettings/adminSettings.routes";
+import { WishlistRoutes } from "../../modules/wishlist/wishlist.routes";
 
 const router = express.Router();
 
@@ -54,8 +57,20 @@ const moduleRoutes = [
     route: CartRoutes,
   },
   {
-    path: "/cart",
+    path: "/inventory",
     route: InventoryRoutes,
+  },
+  {
+    path: "/dashboard",
+    route: DashboardRoutes,
+  },
+  {
+    path: "/adminSettings",
+    route:  AdminSettingsRoutes,
+  },
+  {
+    path: "/wishlist",
+    route:  WishlistRoutes,
   },
 
 ]
