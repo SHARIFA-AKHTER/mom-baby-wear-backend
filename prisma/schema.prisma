@@ -69,6 +69,8 @@ model Order {
   total     Float
   items     Json
   createdAt DateTime    @default(now())
+  
+  payments  Payment[] 
 }
 
 enum OrderStatus {
@@ -89,4 +91,15 @@ model Review {
   comment   String?
   approved  Boolean  @default(false)
   createdAt DateTime @default(now())
+}
+
+model Payment {
+  id            String   @id @default(uuid())
+  orderId       String
+  order         Order    @relation(fields: [orderId], references: [id])
+  amount        Float
+  gateway       String
+  transactionId String?
+  status        String    @default("PENDING")
+  createdAt     DateTime  @default(now())
 }
