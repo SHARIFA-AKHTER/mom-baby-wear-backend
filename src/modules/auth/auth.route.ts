@@ -6,5 +6,13 @@ import { validateRequest } from '../../middleware/validateRequest';
 const router = express.Router();
 router.post('/register', validateRequest(registerSchema), AuthController.register);
 router.post('/login', validateRequest(loginSchema), AuthController.login);
+// Refresh Token
+router.post('/refresh-token', AuthController.refreshToken);
+
+
+router.post('/change-password', 
+    // authenticate,
+     AuthController.changePassword);
+
 
 export const authRoutes = router

@@ -12,6 +12,8 @@ import { InventoryRoutes } from "../../modules/inventory/inventory.routes";
 import { DashboardRoutes } from "../../modules/dashboard/dashboard.routes";
 import { AdminSettingsRoutes } from "../../modules/adminSettings/adminSettings.routes";
 import { WishlistRoutes } from "../../modules/wishlist/wishlist.routes";
+import { stockLogRoutes } from "../../modules/stockLog/stockLog.routes";
+import { AIRoutes } from "../../modules/ai/ai.routes";
 
 const router = express.Router();
 
@@ -71,6 +73,14 @@ const moduleRoutes = [
   {
     path: "/wishlist",
     route:  WishlistRoutes,
+  },
+  {
+    path: "/stockLog",
+    route:  stockLogRoutes,
+  },
+  {
+    path: "/ai",
+    route:   AIRoutes,
   },
 
 ]

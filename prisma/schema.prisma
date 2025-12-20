@@ -17,6 +17,7 @@ model User {
   email              String     @unique
   name               String?
   password           String
+  profileImage       String?
   role               Role       @default(CUSTOMER)
   status             UserStatus @default(ACTIVE)
   needPasswordChange Boolean    @default(false)
@@ -173,4 +174,13 @@ model AdminSettings {
   value     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model AILog {
+  id          String   @id @default(uuid())
+  type        String   // REVIEW | CHAT | COUPON
+  input       String
+  output      String
+  confidence  Float?
+  createdAt   DateTime @default(now())
 }

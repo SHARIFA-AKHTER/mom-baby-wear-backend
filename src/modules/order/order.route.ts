@@ -1,8 +1,9 @@
 import express from 'express';
 import { createOrderValidation } from './order.validation';
 import { orderController } from './order.controller';
-import { authenticate, authorizeRoles } from '../../middleware/auth';
+
 import { validateRequest } from '../../middleware/validateRequest';
+import { authenticate, authorizeRoles } from '../../middleware/auth';
 
 const router = express.Router();
 
@@ -17,32 +18,32 @@ router.post(
 
 router.get(
   '/',
-  authenticate,
-  authorizeRoles('ADMIN', 'MANAGER'),
+  // authenticate,
+  // authorizeRoles('ADMIN', 'MANAGER'),
   orderController.getAllOrders
 );
 
 
 router.get(
   '/:id',
-  authenticate,
-  authorizeRoles('ADMIN', 'CUSTOMER'),
+  // authenticate,
+  // authorizeRoles('ADMIN', 'CUSTOMER'),
   orderController.getSingleOrder
 );
 
 
 router.patch(
   '/:id/status',
-  authenticate,
-  authorizeRoles('ADMIN', 'MANAGER'),
+  // authenticate,
+  // authorizeRoles('ADMIN', 'MANAGER'),
   orderController.updateOrderStatus
 );
 
 
 router.delete(
   '/:id',
-  authenticate,
-  authorizeRoles('ADMIN'),
+  // authenticate,
+  // authorizeRoles('ADMIN'),
   orderController.deleteOrder
 );
 

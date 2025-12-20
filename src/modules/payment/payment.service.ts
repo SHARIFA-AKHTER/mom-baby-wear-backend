@@ -1,32 +1,48 @@
-
 import SSLCommerzPayment from "sslcommerz-lts";
 import Stripe from "stripe";
 import { prisma } from "../../app/shared/prisma";
+import config from "../../config"; 
 
-const store_id = process.env.SSL_STORE_ID!;
-const store_passwd = process.env.SSL_STORE_PASS!;
-const is_live = false; 
+const is_live = false;
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: "2025-11-17.clover",  // preview/latest
+});
 
 class PaymentService {
   // -------------------------------
   // 🔵 1. INIT PAYMENT (SSLCommerz)
   // -------------------------------
-  async initSslPayment(payload: { amount: number; orderId: string }) {
+  async initSslPayment(payload: {
+    customerPhone: string;
+    customerName: string;
+    customerEmail: string;
+    amount: number;
+    orderId: string;
+  }) {
     const data = {
       total_amount: payload.amount,
       currency: "BDT",
       tran_id: payload.orderId,
-      success_url: `${process.env.BACKEND_URL}/api/payments/ssl-success`,
-      fail_url: `${process.env.BACKEND_URL}/api/payments/ssl-fail`,
-      cancel_url: `${process.env.BACKEND_URL}/api/payments/ssl-cancel`,
-      ipn_url: `${process.env.BACKEND_URL}/api/payments/ssl-ipn`,
+      success_url: `${config.ssl.backend_url}/api/payments/ssl-success`,
+      fail_url: `${config.ssl.backend_url}/api/payments/ssl-fail`,
+      cancel_url: `${config.ssl.backend_url}/api/payments/ssl-cancel`,
+      ipn_url: `${config.ssl.backend_url}/api/payments/ssl-ipn`,
       product_name: "Order Payment",
       product_category: "Mom & Baby Wear",
+      product_profile: "physical-goods",
+      cus_name: payload.customerName,
+      cus_email: payload.customerEmail,
+      cus_phone: payload.customerPhone,
+      shipping_method: "NO", 
     };
 
-    const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live);
+    const sslcz = new SSLCommerzPayment(
+      config.ssl.store_id,
+      config.ssl.store_pass,
+      is_live
+    );
+
     return await sslcz.init(data);
   }
 

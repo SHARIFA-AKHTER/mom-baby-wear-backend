@@ -11,7 +11,7 @@ const createOrder = async (userId: string, payload: IOrder) => {
       userId,
       items: payload.items as any,
       total,
-      status: 'PENDING', 
+      status: OrderStatus.PENDING, 
     },
   });
 

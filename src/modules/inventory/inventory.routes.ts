@@ -9,23 +9,23 @@ const router = express.Router();
 // Admin/Manager only
 router.patch(
   "/:productId",
-  authenticate,
-  authorizeRoles("ADMIN", "MANAGER"),
+  // authenticate,
+  // authorizeRoles("ADMIN", "MANAGER"),
   validateRequest(updateInventoryValidation),
   InventoryController.updateStock
 );
 
 router.get(
   "/",
-  authenticate,
-  authorizeRoles("ADMIN", "MANAGER"),
+  // authenticate,
+  // authorizeRoles("ADMIN", "MANAGER"),
   InventoryController.getInventory
 );
 
 router.get(
   "/:productId",
-  authenticate,
-  authorizeRoles("ADMIN", "MANAGER"),
+  // authenticate,
+  // authorizeRoles("ADMIN", "MANAGER"),
   InventoryController.getProductInventory
 );
 

@@ -2,37 +2,37 @@ import dotenv from "dotenv";
 import ms from "ms";
 dotenv.config();
 
-// export default {
-//   port: process.env.PORT,
-//   db_url: process.env.DATABASE_URL,
-//   jwt_secret: process.env.jwt_secret!,
-//   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-//   cloud_api_key: process.env.CLOUDINARY_API_KEY,
-//   cloud_api_secret: process.env.CLOUDINARY_API_SECRET,
-//   stripe_key: process.env.STRIPE_SECRET_KEY,
-// };
 interface JwtConfig {
   secret: string;
   refresh_secret: string;
   expires_in: ms.StringValue;
   refresh_expires_in: ms.StringValue;
 }
+
 export default {
-  port: process.env.PORT,
-  db_url: process.env.DATABASE_URL,
+  port: process.env.PORT || 5000,
+  db_url: process.env.DATABASE_URL || "",
 
   jwt: {
-    secret: process.env.jwt_secret as string,
+    secret: process.env.JWT_SECRET as string,
     refresh_secret: process.env.JWT_REFRESH_SECRET as string,
     expires_in: "7d" as ms.StringValue,
-    refresh_expires_in: "90d",
+    refresh_expires_in: "90d" as ms.StringValue,
   },
 
-  bcrypt_salt_round: process.env.BCRYPT_SALT_ROUND,
+  bcrypt_salt_round: Number(process.env.BCRYPT_SALT_ROUND) || 10,
 
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  cloud_api_key: process.env.CLOUDINARY_API_KEY,
-  cloud_api_secret: process.env.CLOUDINARY_API_SECRET,
+  cloudinary: {
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME as string,
+    api_key: process.env.CLOUDINARY_API_KEY as string,
+    api_secret: process.env.CLOUDINARY_API_SECRET as string,
+  },
 
-  stripe_key: process.env.STRIPE_SECRET_KEY,
+  stripe_key: process.env.STRIPE_SECRET_KEY as string,
+
+  ssl: {
+    store_id: process.env.SSL_STORE_ID as string,
+    store_pass: process.env.SSL_STORE_PASS as string,
+    backend_url: process.env.BACKEND_URL as string,
+  },
 };

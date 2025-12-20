@@ -4,9 +4,14 @@ import { prisma } from "../../app/shared/prisma";
 import { ICategory } from "./category.interface";
 
 
+
 const createCategory = async (payload: ICategory) => {
-return await prisma.category.create({ data: payload });
-};
+  const slug = payload.name.toLowerCase().replace(/\s+/g, "-"); 
+  
+  return await prisma.category.create({ 
+    data: { ...payload, slug } 
+  });
+};;
 
 
 const getCategories = async () => {

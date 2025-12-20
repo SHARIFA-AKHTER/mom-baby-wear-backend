@@ -1,21 +1,37 @@
 import { Request, Response } from 'express';
 import { orderService } from './order.service';
+import { catchAsync } from '../../utils/catchAsync';
+import { sendResponse } from '../../utils/sendResponse';
 
 
+// const createOrder = async (req: Request, res: Response) => {
+//   try {
+//     const authHeader = req.headers.authorization;
+//     if (!authHeader) return res.status(401).json({ success: false, message: "Unauthorized" });
 
-const createOrder = async (req: Request, res: Response) => {
-const userId = req.user?.id!;
+//     const token = authHeader.split(" ")[1];
+//     const payload: any = jwt.verify(token, config.jwt.secret);
 
+   
+//     const userId = payload.id;
 
-const result = await orderService.createOrder(userId, req.body);
+//     const result = await orderService.createOrder(userId, req.body);
+//     return res.status(201).json({ success: true, message: "Order created", data: result });
+//   } catch (err) {
+//     return res.status(401).json({ success: false, message: "Invalid token" });
+//   }
+// };
 
+const createOrder = catchAsync(async (req: Request & { user?: any }, res: Response) => {
+  if (!req.user) {
+    return sendResponse(res, 401, false, 'Unauthorized', null);
+  }
 
-res.status(201).json({
-success: true,
-message: 'Order created successfully',
-data: result,
+  const userId = req.user.id;
+  const result = await orderService.createOrder(userId, req.body);
+
+  sendResponse(res, 201, true, 'Order created successfully', result);
 });
-};
 
 
 const getAllOrders = async (_req: Request, res: Response) => {
@@ -28,7 +44,6 @@ message: 'Orders retrieved successfully',
 data: result,
 });
 };
-
 
 const getSingleOrder = async (req: Request, res: Response) => {
 const { id } = req.params;

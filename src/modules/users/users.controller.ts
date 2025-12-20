@@ -1,15 +1,29 @@
 import { Response } from "express";
 import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
-import { IUser } from "./users.interface";
 import { usersService } from "./users.service";
+import { uploadToCloudinary } from "../../middleware/uploadImage";
 
 
- const createUser = catchAsync(async (req: { body: IUser }, res: Response) => {
-    const result = await usersService.createUser(req.body);
 
-    sendResponse(res, 201, true, "User created successfully", result);
-  })
+//  const createUser = catchAsync(async (req: { body: IUser }, res: Response) => {
+//     const result = await usersService.createUser(req.body);
+
+//     sendResponse(res, 201, true, "User created successfully", result);
+//   })
+const createUser = catchAsync(async (req: any, res: Response) => {
+  
+  if (req.file) {
+    const uploadedUrl = await uploadToCloudinary(req.file);
+    req.body.profileImage = uploadedUrl;
+  }
+
+  const result = await usersService.createUser(req.body);
+  console.log("BODY:", req.body);
+console.log("FILE:", req.file);
+
+  sendResponse(res, 201, true, "User created successfully", result);
+});
 
   const getAllUsers = catchAsync(async (_req: any, res: Response) => {
     const result = await usersService.getAllUsers();
@@ -35,3 +49,7 @@ getAllUsers,
 getSingleUser,
 deleteUser
 };
+function uploadImage(path: any) {
+  throw new Error("Function not implemented.");
+}
+
