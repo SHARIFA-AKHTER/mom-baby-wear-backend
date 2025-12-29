@@ -9,6 +9,10 @@ import config from "../../config";
 import { UserStatus } from "@prisma/client";
 import ms from "ms";
 
+import { hashPassword } from "../../utils/hashPassword";
+import { OAuth2Client } from 'google-auth-library';
+
+
 
 
 const registerUser = async ({ name, email, password }: { name: string; email: string; password: string }) => {
@@ -139,9 +143,10 @@ const changePassword = async (user: any, payload: any) => {
   return { message: "Password changed successfully!" };
 };
 
-const getMe = async (session: any) => {
-  const accessToken = session.accessToken;
-  const decodedData = jwtHelper.verifyToken(
+const getMe = async (accessToken: string) => {
+  if (!accessToken) throw new Error("Access token missing");
+
+  const decodedData: any = jwtHelper.verifyToken(
     accessToken,
     config.jwt.secret as Secret
   );
@@ -155,18 +160,84 @@ const getMe = async (session: any) => {
 
   const { id, email, role, needPasswordChange, status } = userData;
 
+  return { id, email, role, needPasswordChange, status };
+};
+
+
+const client = new OAuth2Client(config.google.client_id);
+interface GooglePayload {
+  idToken: string;
+}
+
+export const authWithGoogle = async (payload: GooglePayload) => {
+  const { idToken } = payload;
+
+  if (!idToken) {
+    throw new Error("Google idToken required!");
+  }
+
+  // ✅ Verify token with Google
+  const ticket = await client.verifyIdToken({
+    idToken,
+    audience: config.google.client_id,
+  });
+
+  const googleUser = ticket.getPayload();
+
+  if (!googleUser?.email) {
+    throw new Error("Google authentication failed!");
+  }
+
+  const { email, name, picture } = googleUser;
+
+  // ✅ Check user exists
+  let user = await prisma.user.findUnique({
+    where: { email },
+  });
+
+  // ✅ Create user if not exists
+  if (!user) {
+    user = await prisma.user.create({
+      data: {
+        email,
+        name: name || "Google User",
+        password: await hashPassword("google-auth"),
+        profileImage: picture,
+        role: "CUSTOMER",
+        needPasswordChange: false,
+      },
+    });
+  }
+
+  // ✅ Generate JWT (MATCHES your middleware)
+  const token = jwt.sign(
+    {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    },
+    config.jwt.secret,
+    { expiresIn: "7d" }
+  );
+
   return {
-    id,
-    email,
-    role,
-    needPasswordChange,
-    status,
+    success: true,
+    message: "Google login successful",
+    token,
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    },
   };
 };
+
 export const AuthService = {
  registerUser,
   loginUser,
   refreshToken,
   changePassword,
-  getMe
+  getMe,
+  authWithGoogle
 };

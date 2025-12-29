@@ -23,6 +23,7 @@ import { sendResponse } from '../../utils/sendResponse';
 // };
 
 const createOrder = catchAsync(async (req: Request & { user?: any }, res: Response) => {
+  console.log("Request Body:", req.body);
   if (!req.user) {
     return sendResponse(res, 401, false, 'Unauthorized', null);
   }

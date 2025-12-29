@@ -83,23 +83,52 @@ const changePassword = catchAsync(async (req: Request & { user?: any }, res: Res
   );
 });
 
+// const getMe = catchAsync(async (req: Request, res: Response) => {
+//   const userSession = req.cookies;
+//   const result = await AuthService.getMe(userSession);
+//   sendResponse(
+//     res,
+//     httpStatus.OK,
+//     true,
+//     "User retrieved successfully!",
+//     result
+//   );
+// });
+
 const getMe = catchAsync(async (req: Request, res: Response) => {
-  const userSession = req.cookies;
-  const result = await AuthService.getMe(userSession);
+  // Get token from cookies
+  const token = req.cookies?.accessToken;
+  if (!token) {
+    return sendResponse(res, httpStatus.UNAUTHORIZED, false, "Not logged in", null);
+  }
+
+  const user = await AuthService.getMe(token);
+
   sendResponse(
     res,
     httpStatus.OK,
     true,
     "User retrieved successfully!",
-    result
+    user
   );
 });
+const googleLogin = catchAsync(async (req: Request, res: Response) => {
+  const result = await AuthService.authWithGoogle(req.body);
 
+  res.cookie("accessToken", result.token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+  });
 
+  sendResponse(res, 200, true, result.message, result.user);
+});
 export const AuthController = {
   register,
   login,
   refreshToken,
   changePassword,
-  getMe
+  getMe,
+ googleLogin
 };

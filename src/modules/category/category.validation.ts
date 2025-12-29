@@ -6,5 +6,7 @@ body: z.object({
 name: z.string().min(1),
 description: z.string().optional(),
 image: z.string().optional()
-})
+}),
+  query: z.object({}).optional(),
+  params: z.object({}).optional(),
 });

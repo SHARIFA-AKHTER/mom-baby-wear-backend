@@ -6,6 +6,7 @@ import { sendResponse } from "../../utils/sendResponse";
 
 const createCategory = catchAsync(async (req: Request, res: Response) => {
 const result = await CategoryService.createCategory(req.body);
+
 sendResponse(res, 201, true, "Category created", result);
 })
 

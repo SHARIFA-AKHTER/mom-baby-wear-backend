@@ -3,9 +3,7 @@ import { z } from "zod";
 export const paymentInitValidation = z.object({
   amount: z.number(),
   orderId: z.string(),
+  customerName: z.string(),
+  customerPhone: z.string(),
+  customerEmail: z.string().email(),
 });
-
-export const paymentVerifyValidation = z.object({
-  val_id: z.string(),
-  orderId: z.string(),
-})
