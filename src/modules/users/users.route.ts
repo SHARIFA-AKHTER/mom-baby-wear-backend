@@ -16,7 +16,7 @@ router.post(
   fileUploader.upload.single("image"),
   validateRequest(createUserSchema),
   usersController.createUser
-);
+); 
 
 // ADMIN & MANAGER - get all users
 router.get(

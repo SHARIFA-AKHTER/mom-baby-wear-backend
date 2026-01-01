@@ -83,17 +83,6 @@ const changePassword = catchAsync(async (req: Request & { user?: any }, res: Res
   );
 });
 
-// const getMe = catchAsync(async (req: Request, res: Response) => {
-//   const userSession = req.cookies;
-//   const result = await AuthService.getMe(userSession);
-//   sendResponse(
-//     res,
-//     httpStatus.OK,
-//     true,
-//     "User retrieved successfully!",
-//     result
-//   );
-// });
 
 const getMe = catchAsync(async (req: Request, res: Response) => {
   // Get token from cookies
@@ -124,11 +113,37 @@ const googleLogin = catchAsync(async (req: Request, res: Response) => {
 
   sendResponse(res, 200, true, result.message, result.user);
 });
+
+const logout = catchAsync(async (req: Request, res: Response) => {
+
+  res.clearCookie("accessToken", {
+    secure: true,
+    httpOnly: true,
+    sameSite: "none",
+  });
+
+
+  res.clearCookie("refreshToken", {
+    secure: true,
+    httpOnly: true,
+    sameSite: "none",
+  });
+
+  sendResponse(
+    res,
+    httpStatus.OK,
+    true,
+    "Logged out successfully!",
+    null
+  );
+});
+
 export const AuthController = {
   register,
   login,
   refreshToken,
   changePassword,
   getMe,
- googleLogin
+ googleLogin,
+  logout
 };

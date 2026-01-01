@@ -19,9 +19,15 @@ return await prisma.category.findMany();
 };
 
 
+
 const getSingleCategory = async (id: string) => {
-return await prisma.category.findUnique({ where: { id } });
-};
+  return await prisma.category.findUnique({ 
+    where: { id },
+    include: {
+      products: true 
+    }
+  });
+}
 
 
 const updateCategory = async (id: string, payload: Partial<ICategory>) => {

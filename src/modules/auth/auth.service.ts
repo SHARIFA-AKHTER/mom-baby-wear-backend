@@ -233,6 +233,7 @@ export const authWithGoogle = async (payload: GooglePayload) => {
   };
 };
 
+
 export const AuthService = {
  registerUser,
   loginUser,

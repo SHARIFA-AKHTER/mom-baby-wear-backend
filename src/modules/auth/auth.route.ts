@@ -16,6 +16,7 @@ router.post('/change-password',
      AuthController.changePassword);
 router.get("/me", AuthController.getMe);
 router.post("/google", AuthController.googleLogin);
+router.post('/logout', AuthController.logout);
 
 
 export const authRoutes = router
