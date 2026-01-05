@@ -36,6 +36,7 @@ export default {
     store_pass: process.env.SSL_STORE_PASS as string,
     backend_url: process.env.BACKEND_URL as string,
   },
+  frontend_url: process.env.FRONTEND_URL as string,
   google: {
   client_id: process.env.GOOGLE_CLIENT_ID as string,
 },

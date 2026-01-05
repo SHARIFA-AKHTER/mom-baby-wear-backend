@@ -14,9 +14,20 @@ app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use((0, cookie_parser_1.default)());
 app.use((0, cors_1.default)({
-    origin: "http://localhost:3000",
+    origin: (origin, callback) => {
+        const allowedOrigins = [
+            "http://localhost:3000",
+            "https://mom-baby-wear-frontend.vercel.app"
+        ];
+        if (!origin || allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
+            callback(null, true);
+        }
+        else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"]
 }));
 node_cron_1.default.schedule("0 0 * * *", async () => {
@@ -33,6 +44,7 @@ node_cron_1.default.schedule("0 0 * * *", async () => {
         console.error("❌ Cron job failed:", err);
     }
 });
+// app.options("*", cors());
 // routes
 app.use("/api", routes_1.default);
 app.get("/", (req, res) => {

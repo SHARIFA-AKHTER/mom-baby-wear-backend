@@ -4,6 +4,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.paymentController = void 0;
 const payment_service_1 = require("./payment.service");
+const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
 class PaymentController {
     constructor() {
         this.initSslPayment = async (req, res) => {
@@ -25,17 +26,17 @@ class PaymentController {
         this.sslSuccess = async (req, res) => {
             try {
                 await payment_service_1.paymentService.verifySslPayment(req.body);
-                res.redirect(`http://localhost:3000/payment/success?tran_id=${req.body.tran_id}`);
+                res.redirect(`${frontendUrl}/payment/success?tran_id=${req.body.tran_id}`);
             }
             catch (error) {
-                res.redirect(`http://localhost:3000/payment/error`);
+                res.redirect(`${frontendUrl}/payment/error`);
             }
         };
         this.sslFail = async (req, res) => {
-            res.redirect(`http://localhost:3000/payment/fail`);
+            res.redirect(`${frontendUrl}/payment/fail`);
         };
         this.sslCancel = async (req, res) => {
-            res.redirect(`http://localhost:3000/payment/cancel`);
+            res.redirect(`${frontendUrl}/payment/cancel`);
         };
         this.sslIPN = async (req, res) => {
             try {

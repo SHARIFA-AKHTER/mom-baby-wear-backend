@@ -50,7 +50,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "ignoreDeprecations": "6.0",
+    // "ignoreDeprecations": "6.0",
     "typeRoots": ["./node_modules/@types", "./src/types"]
   },
   "include": ["src/**/*", "src/types/**/*.d.ts"],

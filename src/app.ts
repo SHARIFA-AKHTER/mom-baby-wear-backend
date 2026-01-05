@@ -13,20 +13,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// app.use(
-//   cors({
-//     // origin: "http://localhost:3000",
-//     origin: [
-//       "http://localhost:3000", 
-//     "https://mom-baby-wear-frontend.vercel.app", 
-//     "mom-baby-wear-frontend-gdp93tc4c-sharifa991s-projects.vercel.app" 
-//       ],
-//     credentials: true,
-//     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-//   allowedHeaders: ["Content-Type", "Authorization"]
-//   })
-// );
-
 app.use(
   cors({
     origin: (origin, callback) => {
@@ -76,3 +62,4 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 export default app;
+
