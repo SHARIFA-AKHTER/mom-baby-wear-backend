@@ -5,12 +5,7 @@ import { IUser } from "./users.interface";
 import { prisma } from "../../app/shared/prisma";
 import { ApiError } from "../../utils/ApiError";
 
-// const createUser = async (payload: IUser) => {
-//   const hashedPassword = await bcrypt.hash(payload.password, 10);
-//   return prisma.user.create({
-//     data: { ...payload, password: hashedPassword },
-//   });
-// };
+
 const createUser = async (payload: IUser) => {
   console.log("PAYLOAD:", payload);
 

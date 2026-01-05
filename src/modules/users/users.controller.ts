@@ -5,12 +5,6 @@ import { usersService } from "./users.service";
 import { uploadToCloudinary } from "../../middleware/uploadImage";
 
 
-
-//  const createUser = catchAsync(async (req: { body: IUser }, res: Response) => {
-//     const result = await usersService.createUser(req.body);
-
-//     sendResponse(res, 201, true, "User created successfully", result);
-//   })
 const createUser = catchAsync(async (req: any, res: Response) => {
   
   if (req.file) {
