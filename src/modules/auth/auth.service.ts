@@ -13,9 +13,8 @@ import { hashPassword } from "../../utils/hashPassword";
 import { OAuth2Client } from 'google-auth-library';
 
 
-
-
 const registerUser = async ({ name, email, password }: { name: string; email: string; password: string }) => {
+  
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) throw new Error("Email already used");
 

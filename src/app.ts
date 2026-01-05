@@ -14,7 +14,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    // origin: "http://localhost:3000",
+    origin: [
+      "http://localhost:3000", 
+    "https://mom-baby-wear-frontend.vercel.app", 
+    "https://mom-baby-wear-frontend-sharifa991s-projects.vercel.app" 
+      ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   allowedHeaders: ["Content-Type", "Authorization"]

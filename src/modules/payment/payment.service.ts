@@ -1,8 +1,14 @@
+// @ts-ignore
 import SSLCommerzPayment from "sslcommerz-lts";
 import { prisma } from "../../app/shared/prisma";
 import config from "../../config";
 
 const is_live = false;
+
+const backend_url =
+  config.env === "production"
+    ? "https://mom-baby-wear-backend.vercel.app"
+    : "http://localhost:5000";
 
 class PaymentService {
   async initSslPayment(payload: {
@@ -16,10 +22,10 @@ class PaymentService {
       total_amount: Number(payload.amount),
       currency: "BDT",
       tran_id: payload.orderId,
-      success_url: `http://localhost:5000/api/payments/ssl-success`,
-      fail_url: `http://localhost:5000/api/payments/ssl-fail`,
-      cancel_url: `http://localhost:5000/api/payments/ssl-cancel`,
-      ipn_url: `http://localhost:5000/api/payments/ssl-ipn`,
+      success_url: `${backend_url}/api/payments/ssl-success`,
+      fail_url: `${backend_url}/api/payments/ssl-fail`,
+      cancel_url: `${backend_url}/api/payments/ssl-cancel`,
+      ipn_url: `${backend_url}/api/payments/ssl-ipn`,
 
       shipping_method: "NO",
       product_name: "Order Payment",
@@ -46,31 +52,32 @@ class PaymentService {
     if (response?.GatewayPageURL) {
       return response.GatewayPageURL;
     } else {
-      throw new Error(response?.failedreason || "Failed to initialize SSLCommerz");
+      throw new Error(
+        response?.failedreason || "Failed to initialize SSLCommerz"
+      );
     }
   }
 
   async verifySslPayment(payload: any) {
     const { tran_id, val_id, amount, status } = payload;
 
-    if (status === 'VALID') {
-        const order = await prisma.order.update({
-            where: { id: tran_id },
-            data: {
-            },
-          });
-      
-          await prisma.payment.create({
-            data: {
-              orderId: tran_id,
-              amount: parseFloat(amount),
-              gateway: "SSLCommerz",
-              transactionId: val_id,
-              status: "SUCCESS",
-            },
-          });
-      
-          return order;
+    if (status === "VALID") {
+      const order = await prisma.order.update({
+        where: { id: tran_id },
+        data: {},
+      });
+
+      await prisma.payment.create({
+        data: {
+          orderId: tran_id,
+          amount: parseFloat(amount),
+          gateway: "SSLCommerz",
+          transactionId: val_id,
+          status: "SUCCESS",
+        },
+      });
+
+      return order;
     }
     throw new Error("Payment is not valid");
   }
@@ -93,7 +100,7 @@ export const paymentService = new PaymentService();
 //     orderId: string;
 //   }) {
 //    const data = {
-//   total_amount: Number(payload.amount), 
+//   total_amount: Number(payload.amount),
 //   currency: "BDT",
 //   tran_id: payload.orderId,
 
@@ -127,7 +134,6 @@ export const paymentService = new PaymentService();
 //       config.ssl.store_pass || "demo",
 //       is_live
 //     );
-
 
 //     const response = await sslcz.init(data);
 

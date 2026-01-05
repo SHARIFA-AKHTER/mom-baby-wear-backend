@@ -10,6 +10,7 @@ interface JwtConfig {
 }
 
 export default {
+  env: process.env.NODE_ENV,
   port: process.env.PORT || 5000,
   db_url: process.env.DATABASE_URL || "",
 

@@ -1,4 +1,4 @@
-// src/types/sslcommerz-lts.d.ts
+
 declare module "sslcommerz-lts" {
   interface SSLCommerzConfig {
     store_id: string;
@@ -28,12 +28,22 @@ declare module "sslcommerz-lts" {
     [key: string]: any;
   }
 
-  class SSLCommerzPayment {
-    constructor(store_id: string, store_passwd: string, is_live: boolean | number);
-    init(data: SSLCommerzPaymentInit): Promise<any>;
-    // some versions might expose other methods; treat them as any
-    [key: string]: any;
-  }
+//   class SSLCommerzPayment {
+//     constructor(store_id: string, store_passwd: string, is_live: boolean | number);
+//     init(data: SSLCommerzPaymentInit): Promise<any>;
+//     // some versions might expose other methods; treat them as any
+//     [key: string]: any;
+//   }
 
-  export = SSLCommerzPayment;
+//   export = SSLCommerzPayment;
+// }
+
+class SSLCommerzPayment {
+    constructor(store_id: string, store_passwd: string, is_live: boolean | number);
+    init(data: any): Promise<any>;
+    validate(data: any): Promise<any>;
+    transactionQueryByTid(data: any): Promise<any>;
+    transactionQueryBySessionId(data: any): Promise<any>;
+  }
+  export default SSLCommerzPayment;
 }

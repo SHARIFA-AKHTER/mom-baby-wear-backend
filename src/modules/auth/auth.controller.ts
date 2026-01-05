@@ -6,9 +6,10 @@ import { sendResponse } from "../../utils/sendResponse";
 import  httpStatus  from 'http-status';
 
 const register = catchAsync(async (req: Request, res: Response) => {
+
   const result = await AuthService.registerUser(req.body);
 
-  res.cookie("accessToken", result.token, {
+  res.cookie("accessToken", result.token, { 
     secure: true,
     httpOnly: true,
     sameSite: "none",

@@ -2,9 +2,8 @@ import { Request, Response } from 'express';
 import { reviewService } from './review.service';
 
 
-
  const createReview = async (req: Request, res: Response) => {
-    const userId = req.user?.id!;
+ const userId = (req as any).user?.id!;
     const result = await reviewService.createReview(userId, req.body);
 
     res.status(201).json({
