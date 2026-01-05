@@ -22,10 +22,26 @@ import { prisma } from "../../app/shared/prisma";
     });
   }
 
-const get = (userId: string) =>{
-    return prisma.wishlist.findUnique({ where: { userId } });
-  }
+const get = async (userId: string) => {
+    const wishlist = await prisma.wishlist.findUnique({ where: { userId } });
+    
+    if (!wishlist || !wishlist.items) {
+        return [];
+    }
 
+    const productIds = wishlist.items as string[];
+
+  
+    const products = await prisma.product.findMany({
+        where: {
+            id: {
+                in: productIds,
+            },
+        },
+    });
+
+    return products;
+};
 const remove = async (userId: string, productId: string) =>{
     let wishlist = await prisma.wishlist.findUnique({ where: { userId } });
     if (!wishlist) return null;

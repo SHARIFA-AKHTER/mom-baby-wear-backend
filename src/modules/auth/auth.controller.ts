@@ -28,14 +28,14 @@ const login = catchAsync(async (req: Request, res: Response) => {
   const result = await AuthService.loginUser(req.body);
 
   res.cookie("accessToken", result.accessToken, {
-    secure: true,
+    secure: process.env.NODE_ENV === "production",
     httpOnly: true,
     sameSite: "none",
     maxAge: 1000 * 60 * 60,
   });
 
   res.cookie("refreshToken", result.refreshToken, {
-    secure: true,
+    secure: process.env.NODE_ENV === "production",
     httpOnly: true,
     sameSite: "none",
     maxAge: 1000 * 60 * 60 * 24 * 90,
@@ -46,7 +46,10 @@ const login = catchAsync(async (req: Request, res: Response) => {
     200,
     true,
     "Login successful",
-    { needPasswordChange: result.needPasswordChange }
+    {
+      accessToken: result.accessToken,
+       needPasswordChange: result.needPasswordChange 
+      }
   );
 });
 
@@ -114,30 +117,42 @@ const googleLogin = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, 200, true, result.message, result.user);
 });
 
+
+
+//   res.clearCookie("accessToken", {
+//     secure: true,
+//     httpOnly: true,
+//     sameSite: "none",
+//   });
+
+
+//   res.clearCookie("refreshToken", {
+//     secure: true,
+//     httpOnly: true,
+//     sameSite: "none",
+//   });
+
+//   sendResponse(
+//     res,
+//     httpStatus.OK,
+//     true,
+//     "Logged out successfully!",
+//     null
+//   );
+// });
 const logout = catchAsync(async (req: Request, res: Response) => {
-
-  res.clearCookie("accessToken", {
-    secure: true,
+  const cookieOptions = {
+    secure: true, 
     httpOnly: true,
-    sameSite: "none",
-  });
+    sameSite: "none" as const, 
+    path: "/"
+  };
 
+  res.clearCookie("accessToken", cookieOptions);
+  res.clearCookie("refreshToken", cookieOptions);
 
-  res.clearCookie("refreshToken", {
-    secure: true,
-    httpOnly: true,
-    sameSite: "none",
-  });
-
-  sendResponse(
-    res,
-    httpStatus.OK,
-    true,
-    "Logged out successfully!",
-    null
-  );
+  sendResponse(res, 200, true, "Logged out successfully!", null);
 });
-
 export const AuthController = {
   register,
   login,

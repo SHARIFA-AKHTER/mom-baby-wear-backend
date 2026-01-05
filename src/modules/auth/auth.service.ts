@@ -158,9 +158,9 @@ const getMe = async (accessToken: string) => {
     },
   });
 
-  const { id, email, role, needPasswordChange, status } = userData;
+const { id, email, role, needPasswordChange, status, name, profileImage } = userData;
 
-  return { id, email, role, needPasswordChange, status };
+  return { id, email, role, needPasswordChange, status,name, profileImage };
 };
 
 

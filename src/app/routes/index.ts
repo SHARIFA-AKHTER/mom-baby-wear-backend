@@ -14,6 +14,7 @@ import { AdminSettingsRoutes } from "../../modules/adminSettings/adminSettings.r
 import { WishlistRoutes } from "../../modules/wishlist/wishlist.routes";
 import { stockLogRoutes } from "../../modules/stockLog/stockLog.routes";
 import { AIRoutes } from "../../modules/ai/ai.routes";
+import { ContactRoutes } from "../../modules/contact/contact.routes";
 
 const router = express.Router();
 
@@ -82,6 +83,10 @@ const moduleRoutes = [
     path: "/ai",
     route:   AIRoutes,
   },
+  {
+  path: "/contact",
+  route: ContactRoutes,
+}
 
 ]
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

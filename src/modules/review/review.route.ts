@@ -25,24 +25,24 @@ router.get(
 // Admin & Manager - get all reviews
 router.get(
   '/',
-  authenticate,
-  authorizeRoles('ADMIN', 'MANAGER'),
+  // authenticate,
+  // authorizeRoles('ADMIN', 'MANAGER'),
   reviewController.getAllReviews
 );
 
 // Approve review (Admin/Manager only)
 router.patch(
   '/approve/:id',
-  authenticate,
-  authorizeRoles('ADMIN', 'MANAGER'),
+  // authenticate,
+  // authorizeRoles('ADMIN', 'MANAGER'),
   reviewController.approveReview
 );
 
 // Delete review (Admin/Manager only)
 router.delete(
   '/:id',
-  authenticate,
-  authorizeRoles('ADMIN', 'MANAGER'),
+  // authenticate,
+  // authorizeRoles('ADMIN', 'MANAGER'),
   reviewController.deleteReview
 );
 
