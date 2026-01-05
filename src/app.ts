@@ -12,13 +12,14 @@ import cron from "node-cron";
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
 app.use(
   cors({
     // origin: "http://localhost:3000",
     origin: [
       "http://localhost:3000", 
     "https://mom-baby-wear-frontend.vercel.app", 
-    "https://mom-baby-wear-frontend-e1zjg8q2d-sharifa991s-projects.vercel.app" 
+    "mom-baby-wear-frontend-gdp93tc4c-sharifa991s-projects.vercel.app" 
       ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
