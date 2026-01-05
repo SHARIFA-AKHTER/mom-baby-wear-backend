@@ -92,7 +92,6 @@ class PaymentService {
           where: { id: tran_id },
           data: {
             status: OrderStatus.PROCESSING,
-            paymentStatus: "PAID",
           },
         });
 
