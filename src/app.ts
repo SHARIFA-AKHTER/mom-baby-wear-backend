@@ -64,6 +64,7 @@ cron.schedule("0 0 * * *", async () => {
   }
 });
 
+// app.options("*", cors());
 // routes
 app.use("/api", router);
 
