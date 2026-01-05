@@ -18,7 +18,7 @@ app.use(
     origin: [
       "http://localhost:3000", 
     "https://mom-baby-wear-frontend.vercel.app", 
-    "https://mom-baby-wear-frontend-sharifa991s-projects.vercel.app" 
+    "https://mom-baby-wear-frontend-e1zjg8q2d-sharifa991s-projects.vercel.app" 
       ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
