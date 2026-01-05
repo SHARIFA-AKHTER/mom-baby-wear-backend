@@ -1,0 +1,12 @@
+"use strict";
+// import { Response } from "express";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.sendResponse = void 0;
+const sendResponse = (res, statusCode, success, message, data) => {
+    return res.status(statusCode).json({
+        success,
+        message,
+        data,
+    });
+};
+exports.sendResponse = sendResponse;
