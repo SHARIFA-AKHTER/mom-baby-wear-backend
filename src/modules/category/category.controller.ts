@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { CategoryService } from "./category.service";
 import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
+import { ApiError } from "../../utils/ApiError";
 
 
 const createCategory = catchAsync(async (req: Request, res: Response) => {
@@ -22,10 +23,16 @@ sendResponse(res, 200, true, "Category fetched", result);
 })
 
 
-const updateCategory  = catchAsync(async (req: { params: { id: any; }; body: any; }, res: any) => {
-const result = await CategoryService.updateCategory(req.params.id, req.body);
-sendResponse(res, 200, true, "Category updated", result);
-})
+const updateCategory = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await CategoryService.updateCategory(id, req.body);
+
+  if (!result) {
+    throw new ApiError(404, "Category not found to update");
+  }
+
+  sendResponse(res, 200, true, "Category updated successfully", result);
+});
 
 
 const removeCategory = catchAsync(async (req: { params: { id: any; }; }, res: any) => {
