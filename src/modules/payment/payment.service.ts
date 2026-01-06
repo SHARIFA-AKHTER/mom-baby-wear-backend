@@ -83,33 +83,35 @@ class PaymentService {
   //   throw new Error("Payment is not valid");
   // }
 
-  async verifySslPayment(payload: any) {
-    const { tran_id, val_id, amount, status } = payload;
+async verifySslPayment(payload: any) {
+  const { tran_id, val_id, amount, status } = payload;
 
-    if (status === "VALID") {
-      return await prisma.$transaction(async (tx) => {
-        await tx.order.update({
-          where: { id: tran_id },
-          data: {
-            status: OrderStatus.PROCESSING,
-          },
-        });
-
-        const paymentRecord = await tx.payment.create({
-          data: {
-            orderId: tran_id,
-            amount: Number(payload.amount),
-            gateway: "SSLCommerz",
-            transactionId: val_id,
-            status: "SUCCESS",
-          },
-        });
-
-        return paymentRecord;
+  if (status === "VALID") {
+    return await prisma.$transaction(async (tx) => {
+      await tx.order.update({
+        where: { id: tran_id },
+        data: {
+          status: OrderStatus.PROCESSING,
+        },
       });
-    }
-    throw new Error("Payment is not valid");
+
+      const paymentRecord = await tx.payment.create({
+        data: {
+          orderId: tran_id,
+          amount: Number(amount),
+          gateway: "SSLCommerz",
+          transactionId: val_id,
+          status: "SUCCESS",
+        },
+      });
+
+      return paymentRecord;
+    });
   }
+
+  throw new Error("Payment is not valid");
+}
+
 }
 
 export const paymentService = new PaymentService();
