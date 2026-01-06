@@ -1,10 +1,14 @@
 "use strict";
 // import { Request, Response } from "express";
 // import { paymentService } from "./payment.service";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.paymentController = void 0;
 const payment_service_1 = require("./payment.service");
-const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
+const config_1 = __importDefault(require("../../config"));
+const frontendUrl = config_1.default.frontend_url || "http://localhost:3000";
 class PaymentController {
     constructor() {
         this.initSslPayment = async (req, res) => {

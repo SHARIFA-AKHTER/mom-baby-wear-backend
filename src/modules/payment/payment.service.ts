@@ -98,7 +98,7 @@ class PaymentService {
         const paymentRecord = await tx.payment.create({
           data: {
             orderId: tran_id,
-            amount: parseFloat(amount),
+            amount: Number(payload.amount),
             gateway: "SSLCommerz",
             transactionId: val_id,
             status: "SUCCESS",
