@@ -54,8 +54,9 @@
 
 import { Request, Response } from "express";
 import { paymentService } from "./payment.service";
+import config from "../../config";
 
-const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
+const frontendUrl = config.frontend_url|| "http://localhost:3000";
 
 class PaymentController {
   initSslPayment = async (req: Request, res: Response) => {
