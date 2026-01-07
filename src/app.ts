@@ -36,6 +36,14 @@ app.use(
   })
 );
 
+
+app.use((req, res, next) => {
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+  res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+  next();
+});
+
+
 cron.schedule("0 0 * * *", async () => {
   console.log("🕛 Running daily cron job at midnight");
 
