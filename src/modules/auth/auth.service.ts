@@ -168,7 +168,7 @@ interface GooglePayload {
   idToken: string;
 }
 
-export const authWithGoogle = async (payload: GooglePayload) => {
+const authWithGoogle = async (payload: GooglePayload) => {
   const { idToken } = payload;
 
   if (!idToken) {

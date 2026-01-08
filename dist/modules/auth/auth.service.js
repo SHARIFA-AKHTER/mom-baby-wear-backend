@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthService = exports.authWithGoogle = void 0;
+exports.AuthService = void 0;
 const prisma_1 = require("../../app/shared/prisma");
 const ApiError_1 = require("../../utils/ApiError");
 const http_status_1 = __importDefault(require("http-status"));
@@ -156,12 +156,11 @@ const authWithGoogle = async (payload) => {
         },
     };
 };
-exports.authWithGoogle = authWithGoogle;
 exports.AuthService = {
     registerUser,
     loginUser,
     refreshToken,
     changePassword,
     getMe,
-    authWithGoogle: exports.authWithGoogle
+    authWithGoogle
 };

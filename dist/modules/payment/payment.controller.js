@@ -8,7 +8,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.paymentController = void 0;
 const payment_service_1 = require("./payment.service");
 const config_1 = __importDefault(require("../../config"));
-const frontendUrl = config_1.default.frontend_url || "http://localhost:3000";
+const frontendUrl = config_1.default.frontend_url || "https://mom-baby-wear-frontend.vercel.app";
 class PaymentController {
     constructor() {
         this.initSslPayment = async (req, res) => {

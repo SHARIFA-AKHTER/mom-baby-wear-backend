@@ -17,19 +17,27 @@ app.use((0, cors_1.default)({
     origin: (origin, callback) => {
         const allowedOrigins = [
             "http://localhost:3000",
-            "https://mom-baby-wear-frontend.vercel.app"
+            "https://mom-baby-wear-frontend.vercel.app",
         ];
-        if (!origin || allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
+        if (!origin ||
+            allowedOrigins.includes(origin) ||
+            origin.includes("vercel.app") ||
+            origin.includes("sslcommerz.com")) {
             callback(null, true);
         }
         else {
-            callback(new Error("Not allowed by CORS"));
+            callback(new Error(`Not allowed by CORS from origin: ${origin}`));
         }
     },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"]
+    allowedHeaders: ["Content-Type", "Authorization"],
 }));
+app.use((req, res, next) => {
+    res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+    res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+    next();
+});
 node_cron_1.default.schedule("0 0 * * *", async () => {
     console.log("🕛 Running daily cron job at midnight");
     try {
@@ -44,7 +52,6 @@ node_cron_1.default.schedule("0 0 * * *", async () => {
         console.error("❌ Cron job failed:", err);
     }
 });
-// app.options("*", cors());
 // routes
 app.use("/api", routes_1.default);
 app.get("/", (req, res) => {
