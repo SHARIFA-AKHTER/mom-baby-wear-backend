@@ -30,6 +30,7 @@ const analyzeReview = async (comment: string): Promise<AIReviewResult> => {
 };
 
 const chatSupport = async (message: string) => {
+
   let reply = "Please contact customer support.";
 
   if (message.toLowerCase().includes("delivery"))
@@ -38,7 +39,6 @@ const chatSupport = async (message: string) => {
     reply = "Refund available within 7 days.";
   else if (message.toLowerCase().includes("size"))
     reply = "Size chart is available on product details page.";
-
   await prisma.aILog.create({
     data: {
       type: "CHAT",

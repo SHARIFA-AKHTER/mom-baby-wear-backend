@@ -6,7 +6,7 @@ import { sendResponse } from '../../utils/sendResponse';
 
 const createMessage = catchAsync(async (req: Request, res: Response) => {
   const result = await ContactService.createMessage(req.body);
-
+console.log("Service Result:", result);
 
   sendResponse(res, 201, true, 'Message sent successfully!', result);
 });
