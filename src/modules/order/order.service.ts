@@ -1,6 +1,7 @@
 import { OrderStatus } from '@prisma/client';
 import { prisma } from '../../app/shared/prisma';
 import { IOrder } from './order.interface';
+import { paginationHelper } from '../../utils/paginationHelper';
 
 
 const createOrder = async (userId: string, payload: IOrder) => {
@@ -35,13 +36,45 @@ const calculateTotal = async (items: any[]) => {
 };
 
 
-const getAllOrders = () => {
-  return prisma.order.findMany({
-    include: {
-      user: true,
-    },
-    orderBy: { createdAt: 'desc' },
+const getAllOrders = async (filters: any, options: any) => {
+  const { limit, page, skip, sortBy, sortOrder } = paginationHelper.calculatePagination(options);
+  const { searchTerm, ...filterData } = filters;
+
+  const andConditions = [];
+
+  if (searchTerm) {
+    andConditions.push({
+      OR: [
+        { id: { contains: searchTerm } }, 
+        
+      ],
+    });
+  }
+
+  if (Object.keys(filterData).length > 0) {
+    andConditions.push({
+      AND: Object.entries(filterData).map(([field, value]) => ({
+        [field]: value
+      })),
+    });
+  }
+
+  const whereConditions = andConditions.length > 0 ? { AND: andConditions } : {};
+
+  const result = await prisma.order.findMany({
+    where: whereConditions,
+    include: { user: true },
+    skip,
+    take: limit,
+    orderBy: { [sortBy]: sortOrder },
   });
+
+  const total = await prisma.order.count({ where: whereConditions });
+
+  return {
+    meta: { page, limit, total },
+    result: result,
+  };
 };
 
 // Get Single Order

@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { orderService } from './order.service';
 import { catchAsync } from '../../utils/catchAsync';
 import { sendResponse } from '../../utils/sendResponse';
+import pick from '../../utils/pick';
 
 
 // const createOrder = async (req: Request, res: Response) => {
@@ -36,14 +37,13 @@ const createOrder = catchAsync(async (req: Request & { user?: any }, res: Respon
 
 
 const getAllOrders = async (_req: Request, res: Response) => {
-const result = await orderService.getAllOrders();
+const filters = pick(_req.query, ['searchTerm', 'status', 'userId'])
+const options = pick(_req.query, ['page', 'limit', 'sortBy', 'sortOrder'])
 
+const dataWithMeta = await orderService.getAllOrders(filters,options)
 
-res.json({
-success: true,
-message: 'Orders retrieved successfully',
-data: result,
-});
+sendResponse(res,200,true, "order fetched successfully", dataWithMeta)
+
 };
 
 const getSingleOrder = async (req: Request, res: Response) => {
