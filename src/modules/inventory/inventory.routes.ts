@@ -3,6 +3,7 @@ import { InventoryController } from "./inventory.controller";
 import { authenticate, authorizeRoles } from "../../middleware/auth";
 import { validateRequest } from "../../middleware/validateRequest";
 import { updateInventoryValidation } from "./inventory.validation";
+import authorize from "../../middleware/authorize";
 
 const router = express.Router();
 
@@ -10,22 +11,22 @@ const router = express.Router();
 router.patch(
   "/:productId",
   // authenticate,
-  // authorizeRoles("ADMIN", "MANAGER"),
+  // authorize("ADMIN", "MANAGER"),
   validateRequest(updateInventoryValidation),
   InventoryController.updateStock
 );
 
 router.get(
   "/",
-  // authenticate,
-  // authorizeRoles("ADMIN", "MANAGER"),
+  authenticate,
+  authorize("ADMIN", "MANAGER"),
   InventoryController.getInventory
 );
 
 router.get(
   "/:productId",
   // authenticate,
-  // authorizeRoles("ADMIN", "MANAGER"),
+  // authorize("ADMIN", "MANAGER"),
   InventoryController.getProductInventory
 );
 

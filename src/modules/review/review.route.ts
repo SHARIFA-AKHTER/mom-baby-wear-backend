@@ -4,6 +4,7 @@ import { createReviewValidation } from './review.validation';
 import { reviewController } from './review.controller';
 import { authenticate, authorizeRoles } from '../../middleware/auth';
 import { validateRequest } from '../../middleware/validateRequest';
+import authorize from '../../middleware/authorize';
 
 const router = express.Router();
 
@@ -25,8 +26,8 @@ router.get(
 // Admin & Manager - get all reviews
 router.get(
   '/',
-  // authenticate,
-  // authorizeRoles('ADMIN', 'MANAGER'),
+  authenticate,
+  authorize('ADMIN', 'MANAGER'),
   reviewController.getAllReviews
 );
 
@@ -34,7 +35,7 @@ router.get(
 router.patch(
   '/approve/:id',
   // authenticate,
-  // authorizeRoles('ADMIN', 'MANAGER'),
+  // authorize('ADMIN', 'MANAGER'),
   reviewController.approveReview
 );
 
@@ -42,7 +43,7 @@ router.patch(
 router.delete(
   '/:id',
   // authenticate,
-  // authorizeRoles('ADMIN', 'MANAGER'),
+  // authorize('ADMIN', 'MANAGER'),
   reviewController.deleteReview
 );
 

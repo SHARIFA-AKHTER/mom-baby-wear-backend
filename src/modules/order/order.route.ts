@@ -3,14 +3,15 @@ import { createOrderValidation } from './order.validation';
 import { orderController } from './order.controller';
 
 import { validateRequest } from '../../middleware/validateRequest';
-import { authenticate, authorizeRoles } from '../../middleware/auth';
+import { authenticate} from '../../middleware/auth';
+import authorize from '../../middleware/authorize';
 
 const router = express.Router();
 
 router.post(
   '/',
   authenticate,                
-  authorizeRoles('CUSTOMER'),     
+  authorize('CUSTOMER'),     
   validateRequest(createOrderValidation),
   orderController.createOrder
 );
@@ -18,32 +19,32 @@ router.post(
 
 router.get(
   '/',
-  // authenticate,
-  // authorizeRoles('ADMIN', 'MANAGER'),
+  authenticate,
+  authorize('ADMIN', 'MANAGER'),
   orderController.getAllOrders
 );
 
 
 router.get(
   '/:id',
-  // authenticate,
-  // authorizeRoles('ADMIN', 'CUSTOMER'),
+  authenticate,
+  authorize('ADMIN', 'CUSTOMER'),
   orderController.getSingleOrder
 );
 
 
 router.patch(
   '/:id/status',
-  // authenticate,
-  // authorizeRoles('ADMIN', 'MANAGER'),
+  authenticate,
+  authorize('ADMIN', 'MANAGER'),
   orderController.updateOrderStatus
 );
 
 
 router.delete(
   '/:id',
-  // authenticate,
-  // authorizeRoles('ADMIN'),
+  authenticate,
+  authorize('ADMIN'),
   orderController.deleteOrder
 );
 

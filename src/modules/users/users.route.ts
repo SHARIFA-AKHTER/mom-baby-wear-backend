@@ -3,16 +3,17 @@ import express from "express";
 import { createUserSchema } from "./users.validation";
 import { usersController } from "./users.controller";
 import { validateRequest } from "../../middleware/validateRequest";
-import { authenticate, authorizeRoles } from "../../middleware/auth";
+import { authenticate} from "../../middleware/auth";
 import { fileUploader } from "../../middleware/uploadImage";
+import authorize from "../../middleware/authorize";
 
 const router = express.Router();
 
 // ADMIN only - create user manually
 router.post(
   "/create",
-  // authenticate,
-  // authorizeRoles("ADMIN"),
+  authenticate,
+  authorize("ADMIN"),
   fileUploader.upload.single("image"),
   validateRequest(createUserSchema),
   usersController.createUser
@@ -21,8 +22,8 @@ router.post(
 // ADMIN & MANAGER - get all users
 router.get(
   "/",
-  // authenticate,
-  // authorizeRoles("ADMIN", "MANAGER"),
+  authenticate,
+  authorize("ADMIN", "MANAGER"),
   usersController.getAllUsers
 );
 
@@ -35,7 +36,7 @@ router.get("/:id",
 router.delete(
   "/:id",
   // authenticate,
-  // authorizeRoles("ADMIN"),
+  // authorize("ADMIN"),
   usersController.deleteUser
 );
 
