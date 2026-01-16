@@ -4,16 +4,34 @@ import { createProductSchema } from "./product.validation";
 
 import { validateRequest } from "../../middleware/validateRequest";
 import { productController } from "./product.controller";
-
+import { authenticate } from "../../middleware/auth";
+import authorize from "../../middleware/authorize";
+import { Role } from "@prisma/client";
 
 const router = express.Router();
 
-
-router.post("/create", validateRequest(createProductSchema), productController.createProduct);
 router.get("/", productController.getProducts);
 router.get("/:id", productController.getProductById);
-router.patch("/:id", productController.updateProduct);
-router.delete("/:id", productController.deleteProduct);
 
+router.post(
+  "/create",
+  authenticate,
+  authorize(Role.ADMIN, Role.MANAGER),
+  validateRequest(createProductSchema),
+  productController.createProduct
+);
 
-export const productRoutes = router
+router.patch(
+  "/:id",
+  authenticate,
+  authorize(Role.ADMIN, Role.MANAGER),
+  productController.updateProduct
+);
+router.delete(
+  "/:id",
+  authenticate,
+  authorize(Role.ADMIN, Role.MANAGER),
+  productController.deleteProduct
+);
+
+export const productRoutes = router;

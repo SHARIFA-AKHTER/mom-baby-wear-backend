@@ -1,8 +1,9 @@
-import { Response } from "express";
+import { Request, Response } from "express";
 import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 import { usersService } from "./users.service";
 import { uploadToCloudinary } from "../../middleware/uploadImage";
+import pick from "../../utils/pick";
 
 
 const createUser = catchAsync(async (req: any, res: Response) => {
@@ -19,11 +20,22 @@ console.log("FILE:", req.file);
   sendResponse(res, 201, true, "User created successfully", result);
 });
 
-  const getAllUsers = catchAsync(async (_req: any, res: Response) => {
-    const result = await usersService.getAllUsers();
+const getAllUsers = catchAsync(async (req: Request, res: Response) => {
 
-    sendResponse(res, 200, true, "Users fetched successfully", result);
-  })
+  const filters = pick(req.query, ["searchTerm", "role", "status"]);
+  const options = pick(req.query, ["page", "limit", "sortBy", "sortOrder"]);
+
+  const dataWithMeta = await usersService.getAllUsers(filters, options);
+
+
+  return sendResponse(
+    res,
+    200,
+    true,
+    "Users fetched successfully",
+    dataWithMeta
+  );
+});
 
   const getSingleUser = catchAsync(async (req: { params: { id: string } }, res: Response) => {
     const result = await usersService.getSingleUser(req.params.id);
