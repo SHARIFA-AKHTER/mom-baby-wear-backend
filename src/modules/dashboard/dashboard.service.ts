@@ -1,48 +1,66 @@
 import { prisma } from "../../app/shared/prisma";
 
+const getStats = async () => {
 
+  const totalUsers = await prisma.user.count();
+  const totalOrders = await prisma.order.count();
+  const totalProducts = await prisma.product.count();
+  
 
- const getStats = async () =>{
-    const totalUsers = await prisma.order.count();
-     const totalOrders = await prisma.order.count(); 
-    const totalRevenue = await prisma.order.aggregate({
-      _sum: { total: true },
-    });
-    const totalProducts = await prisma.product.count();
+  const totalRevenue = await prisma.order.aggregate({
+    where: { status: 'DELIVERED' },
+    _sum: { total: true },
+  });
 
-    return {
-      totalUsers,
-      totalOrders,
-      totalRevenue: totalRevenue._sum.total || 0,
-      totalProducts,
-    };
-  }
+  return {
+    totalUsers,
+    totalOrders,
+    totalRevenue: totalRevenue._sum.total || 0,
+    totalProducts,
+  };
+};
 
-  // Monthly sales chart
- const getMonthlySales = async () =>{
-    // Returns monthly revenue for last 12 months
-    const result = await prisma.$queryRaw`
-      SELECT
-        TO_CHAR(DATE_TRUNC('month', "createdAt"), 'YYYY-MM') AS month,
-        SUM(total) AS revenue
-      FROM "Order"
-      WHERE "status" = 'DELIVERED'
-      GROUP BY month
-      ORDER BY month ASC
-    `;
-    return result;
-  }
+const getMonthlySales = async () => {
 
-  // Low stock products
- const getLowStockProducts = async () =>{
-    const lowStock = await prisma.inventory.findMany({
-      where: { lowStock: true },
-      include: { product: true },
-    });
-    return lowStock;
-  }
-  export const DashboardService = {
-getStats,
-getMonthlySales,
-getLowStockProducts
+  const result = await prisma.$queryRaw`
+    SELECT 
+      TO_CHAR("createdAt", 'Mon YYYY') AS month,
+      SUM(total) AS revenue
+    FROM "Order"
+    WHERE "status" = 'DELIVERED'
+    GROUP BY month, DATE_TRUNC('month', "createdAt")
+    ORDER BY DATE_TRUNC('month', "createdAt") ASC
+    LIMIT 12
+  `;
+  return result;
+};
+
+const getLowStockProducts = async () => {
+  return await prisma.inventory.findMany({
+    where: { 
+        quantity: { 
+        lt: 10 
+      }
+    },
+    include: { product: true },
+  });
+};
+
+const getRecentOrders = async () => {
+  return await prisma.order.findMany({
+    take: 5,
+    orderBy: { createdAt: 'desc' },
+    include: {
+      user: {
+        select: { name: true, email: true }
+      }
+    }
+  });
+};
+
+export const DashboardService = {
+  getStats,
+  getMonthlySales,
+  getLowStockProducts,
+  getRecentOrders
 };

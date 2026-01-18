@@ -2,8 +2,9 @@ import express from "express";
 
 import { createCouponValidation, updateCouponValidation } from "./coupon.validation";
 import { CouponController } from "./coupon.controller";
-import { authenticate, authorizeRoles } from "../../middleware/auth";
+import { authenticate } from "../../middleware/auth";
 import { validateRequest } from "../../middleware/validateRequest";
+import authorize from "../../middleware/authorize";
 
 
 const router = express.Router();
@@ -12,7 +13,7 @@ const router = express.Router();
 router.post(
   "/",
  authenticate,
-  authorizeRoles("ADMIN", "MANAGER"),
+  authorize("ADMIN", "MANAGER"),
   validateRequest(createCouponValidation),
   CouponController.createCoupon
 );
@@ -25,7 +26,7 @@ router.get("/:id", CouponController.getSingleCoupon);
 router.patch(
   "/:id",
    authenticate,
-  authorizeRoles("ADMIN", "MANAGER"),
+  authorize("ADMIN", "MANAGER"),
   validateRequest(updateCouponValidation),
   CouponController.updateCoupon
 );
@@ -33,7 +34,7 @@ router.patch(
 router.delete(
   "/:id",
   authenticate,
-  authorizeRoles("ADMIN"),
+  authorize("ADMIN"),
   CouponController.deleteCoupon
 );
 

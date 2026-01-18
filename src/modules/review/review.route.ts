@@ -31,6 +31,11 @@ router.get(
   reviewController.getAllReviews
 );
 
+router.get(
+  '/public-stats',
+  reviewController.getPublicStats
+);
+
 // Approve review (Admin/Manager only)
 router.patch(
   '/approve/:id',

@@ -15,6 +15,7 @@ import { WishlistRoutes } from "../../modules/wishlist/wishlist.routes";
 import { stockLogRoutes } from "../../modules/stockLog/stockLog.routes";
 import { AIRoutes } from "../../modules/ai/ai.routes";
 import { ContactRoutes } from "../../modules/contact/contact.routes";
+import { NewsletterRoutes } from "../../modules/newsletter/newsletter.routes";
 
 const router = express.Router();
 
@@ -23,7 +24,7 @@ const router = express.Router();
 // });
 
 const moduleRoutes = [
- {
+  {
     path: "/user",
     route: userRoutes,
   },
@@ -69,25 +70,28 @@ const moduleRoutes = [
   },
   {
     path: "/adminSettings",
-    route:  AdminSettingsRoutes,
+    route: AdminSettingsRoutes,
   },
   {
     path: "/wishlist",
-    route:  WishlistRoutes,
+    route: WishlistRoutes,
   },
   {
     path: "/stockLog",
-    route:  stockLogRoutes,
+    route: stockLogRoutes,
   },
   {
     path: "/ai",
-    route:   AIRoutes,
+    route: AIRoutes,
   },
   {
-  path: "/contact",
-  route: ContactRoutes,
-}
-
-]
+    path: "/contact",
+    route: ContactRoutes,
+  },
+  {
+    path: "/newsletter",
+    route: NewsletterRoutes,
+  },
+];
 moduleRoutes.forEach((route) => router.use(route.path, route.route));
 export default router;

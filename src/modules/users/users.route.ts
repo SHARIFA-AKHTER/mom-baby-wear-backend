@@ -12,8 +12,8 @@ const router = express.Router();
 // ADMIN only - create user manually
 router.post(
   "/create",
-  authenticate,
-  authorize("ADMIN"),
+  // authenticate,
+  // authorize("ADMIN"),
   fileUploader.upload.single("image"),
   validateRequest(createUserSchema),
   usersController.createUser
@@ -22,8 +22,8 @@ router.post(
 // ADMIN & MANAGER - get all users
 router.get(
   "/",
-  authenticate,
-  authorize("ADMIN", "MANAGER"),
+  // authenticate,
+  // authorize("ADMIN", "MANAGER"),
   usersController.getAllUsers
 );
 

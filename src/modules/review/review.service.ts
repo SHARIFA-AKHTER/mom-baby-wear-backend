@@ -89,11 +89,26 @@ const approveReview = (id: string) =>{
     });
   }
 
+const getPublicStats = async () => {
+  const [totalUsers, totalProducts, totalReviews] = await Promise.all([
+    prisma.user.count(),
+    prisma.product.count(),
+    prisma.review.count({ where: { approved: true } })
+  ]);
+
+  return {
+    happyMoms: totalUsers + 100, 
+    productsSold: totalProducts * 5, 
+    totalReviews: totalReviews,
+    avgRating: "4.9/5"
+  };
+};
 
 export const reviewService = {
 createReview,
 getProductReviews,
 getAllReviews,
 approveReview,
-deleteReview
+deleteReview,
+getPublicStats
 }

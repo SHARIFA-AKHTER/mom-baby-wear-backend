@@ -194,3 +194,9 @@ model ContactMessage {
   message   String
   createdAt DateTime @default(now())
 }
+
+model Newsletter {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}

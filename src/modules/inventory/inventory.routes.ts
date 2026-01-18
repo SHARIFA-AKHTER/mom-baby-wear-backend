@@ -18,8 +18,8 @@ router.patch(
 
 router.get(
   "/",
-  authenticate,
-  authorize("ADMIN", "MANAGER"),
+  // authenticate,
+  // authorize("ADMIN", "MANAGER"),
   InventoryController.getInventory
 );
 

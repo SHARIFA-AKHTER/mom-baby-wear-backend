@@ -41,10 +41,17 @@ const deleteReview = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, 200, true, "Review deleted successfully", result);
 });
 
+const getPublicStats = catchAsync(async (req: Request, res: Response) => {
+  const result = await reviewService.getPublicStats();
+
+  sendResponse(res, 200, true, "Public statistics fetched successfully", result);
+});
+
 export const reviewController = {
   createReview,
   getProductReviews,
   getAllReviews,
   approveReview,
   deleteReview,
+  getPublicStats
 };
