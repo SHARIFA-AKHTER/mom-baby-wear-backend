@@ -9,12 +9,13 @@ const coupon_validation_1 = require("./coupon.validation");
 const coupon_controller_1 = require("./coupon.controller");
 const auth_1 = require("../../middleware/auth");
 const validateRequest_1 = require("../../middleware/validateRequest");
+const authorize_1 = __importDefault(require("../../middleware/authorize"));
 const router = express_1.default.Router();
 // ADMIN only
-router.post("/", auth_1.authenticate, (0, auth_1.authorizeRoles)("ADMIN", "MANAGER"), (0, validateRequest_1.validateRequest)(coupon_validation_1.createCouponValidation), coupon_controller_1.CouponController.createCoupon);
+router.post("/", auth_1.authenticate, (0, authorize_1.default)("ADMIN", "MANAGER"), (0, validateRequest_1.validateRequest)(coupon_validation_1.createCouponValidation), coupon_controller_1.CouponController.createCoupon);
 // Public (optional)
 router.get("/", coupon_controller_1.CouponController.getAllCoupons);
 router.get("/:id", coupon_controller_1.CouponController.getSingleCoupon);
-router.patch("/:id", auth_1.authenticate, (0, auth_1.authorizeRoles)("ADMIN", "MANAGER"), (0, validateRequest_1.validateRequest)(coupon_validation_1.updateCouponValidation), coupon_controller_1.CouponController.updateCoupon);
-router.delete("/:id", auth_1.authenticate, (0, auth_1.authorizeRoles)("ADMIN"), coupon_controller_1.CouponController.deleteCoupon);
+router.patch("/:id", auth_1.authenticate, (0, authorize_1.default)("ADMIN", "MANAGER"), (0, validateRequest_1.validateRequest)(coupon_validation_1.updateCouponValidation), coupon_controller_1.CouponController.updateCoupon);
+router.delete("/:id", auth_1.authenticate, (0, authorize_1.default)("ADMIN"), coupon_controller_1.CouponController.deleteCoupon);
 exports.couponRoutes = router;

@@ -1,9 +1,13 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.orderController = void 0;
 const order_service_1 = require("./order.service");
 const catchAsync_1 = require("../../utils/catchAsync");
 const sendResponse_1 = require("../../utils/sendResponse");
+const pick_1 = __importDefault(require("../../utils/pick"));
 // const createOrder = async (req: Request, res: Response) => {
 //   try {
 //     const authHeader = req.headers.authorization;
@@ -27,12 +31,10 @@ const createOrder = (0, catchAsync_1.catchAsync)(async (req, res) => {
     (0, sendResponse_1.sendResponse)(res, 201, true, 'Order created successfully', result);
 });
 const getAllOrders = async (_req, res) => {
-    const result = await order_service_1.orderService.getAllOrders();
-    res.json({
-        success: true,
-        message: 'Orders retrieved successfully',
-        data: result,
-    });
+    const filters = (0, pick_1.default)(_req.query, ['searchTerm', 'status', 'userId']);
+    const options = (0, pick_1.default)(_req.query, ['page', 'limit', 'sortBy', 'sortOrder']);
+    const dataWithMeta = await order_service_1.orderService.getAllOrders(filters, options);
+    (0, sendResponse_1.sendResponse)(res, 200, true, "order fetched successfully", dataWithMeta);
 };
 const getSingleOrder = async (req, res) => {
     const { id } = req.params;

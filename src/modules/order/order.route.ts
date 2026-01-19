@@ -20,15 +20,15 @@ router.post(
 router.get(
   '/',
   authenticate,
-  authorize('ADMIN', 'MANAGER'),
+  authorize('ADMIN', 'MANAGER','STAFF'),
   orderController.getAllOrders
 );
 
 
 router.get(
   '/:id',
-  authenticate,
-  authorize('ADMIN', 'CUSTOMER'),
+  // authenticate,
+  // authorize('ADMIN', 'CUSTOMER','STAFF'),
   orderController.getSingleOrder
 );
 
@@ -36,15 +36,15 @@ router.get(
 router.patch(
   '/:id/status',
   authenticate,
-  authorize('ADMIN', 'MANAGER'),
+  authorize('ADMIN', 'MANAGER','STAFF'),
   orderController.updateOrderStatus
 );
 
 
 router.delete(
   '/:id',
-  authenticate,
-  authorize('ADMIN'),
+  // authenticate,
+  // authorize('ADMIN'),
   orderController.deleteOrder
 );
 

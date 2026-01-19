@@ -12,14 +12,14 @@ const router = express_1.default.Router();
 // Admin/Manager only
 router.patch("/:productId", 
 // authenticate,
-// authorizeRoles("ADMIN", "MANAGER"),
+// authorize("ADMIN", "MANAGER"),
 (0, validateRequest_1.validateRequest)(inventory_validation_1.updateInventoryValidation), inventory_controller_1.InventoryController.updateStock);
 router.get("/", 
 // authenticate,
-// authorizeRoles("ADMIN", "MANAGER"),
+// authorize("ADMIN", "MANAGER"),
 inventory_controller_1.InventoryController.getInventory);
 router.get("/:productId", 
 // authenticate,
-// authorizeRoles("ADMIN", "MANAGER"),
+// authorize("ADMIN", "MANAGER"),
 inventory_controller_1.InventoryController.getProductInventory);
 exports.InventoryRoutes = router;

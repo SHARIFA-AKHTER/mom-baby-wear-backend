@@ -2,15 +2,32 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ContactService = void 0;
 const prisma_1 = require("../../app/shared/prisma");
+const ai_service_1 = require("../ai/ai.service");
+// const createMessage = async (data: IContactMessage) => {
+//   const result = await prisma.contactMessage.create({
+//     data: {
+//       name: data.name,
+//       email: data.email,
+//       message: data.message
+//     },
+//   });
+//   return result;
+// };
 const createMessage = async (data) => {
-    const result = await prisma_1.prisma.contactMessage.create({
+    const savedMessage = await prisma_1.prisma.contactMessage.create({
         data: {
             name: data.name,
             email: data.email,
-            message: data.message
+            message: data.message,
         },
     });
-    return result;
+    const aiReply = await ai_service_1.AIService.chatSupport(data.message);
+    const finalData = {
+        ...savedMessage,
+        autoReply: aiReply,
+    };
+    console.log("Final Object before return:", finalData);
+    return finalData;
 };
 const getAllMessages = async () => {
     const result = await prisma_1.prisma.contactMessage.findMany({

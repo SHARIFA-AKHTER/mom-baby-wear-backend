@@ -20,6 +20,7 @@ const wishlist_routes_1 = require("../../modules/wishlist/wishlist.routes");
 const stockLog_routes_1 = require("../../modules/stockLog/stockLog.routes");
 const ai_routes_1 = require("../../modules/ai/ai.routes");
 const contact_routes_1 = require("../../modules/contact/contact.routes");
+const newsletter_routes_1 = require("../../modules/newsletter/newsletter.routes");
 const router = express_1.default.Router();
 // router.get("/", (req, res) => {
 //   res.send({ status: "OK" });
@@ -88,7 +89,11 @@ const moduleRoutes = [
     {
         path: "/contact",
         route: contact_routes_1.ContactRoutes,
-    }
+    },
+    {
+        path: "/newsletter",
+        route: newsletter_routes_1.NewsletterRoutes,
+    },
 ];
 moduleRoutes.forEach((route) => router.use(route.path, route.route));
 exports.default = router;

@@ -13,12 +13,12 @@ const router = express_1.default.Router();
 // ADMIN only - create user manually
 router.post("/create", 
 // authenticate,
-// authorizeRoles("ADMIN"),
+// authorize("ADMIN"),
 uploadImage_1.fileUploader.upload.single("image"), (0, validateRequest_1.validateRequest)(users_validation_1.createUserSchema), users_controller_1.usersController.createUser);
 // ADMIN & MANAGER - get all users
 router.get("/", 
 // authenticate,
-// authorizeRoles("ADMIN", "MANAGER"),
+// authorize("ADMIN", "MANAGER"),
 users_controller_1.usersController.getAllUsers);
 // Get single user - ADMIN or the user himself
 router.get("/:id", 
@@ -27,6 +27,6 @@ users_controller_1.usersController.getSingleUser);
 // ADMIN only - delete user
 router.delete("/:id", 
 // authenticate,
-// authorizeRoles("ADMIN"),
+// authorize("ADMIN"),
 users_controller_1.usersController.deleteUser);
 exports.userRoutes = router;

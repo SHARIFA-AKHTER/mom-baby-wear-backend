@@ -3,12 +3,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DashboardService = void 0;
 const prisma_1 = require("../../app/shared/prisma");
 const getStats = async () => {
-    const totalUsers = await prisma_1.prisma.order.count();
+    const totalUsers = await prisma_1.prisma.user.count();
     const totalOrders = await prisma_1.prisma.order.count();
+    const totalProducts = await prisma_1.prisma.product.count();
     const totalRevenue = await prisma_1.prisma.order.aggregate({
+        where: { status: 'DELIVERED' },
         _sum: { total: true },
     });
-    const totalProducts = await prisma_1.prisma.product.count();
     return {
         totalUsers,
         totalOrders,
@@ -16,30 +17,43 @@ const getStats = async () => {
         totalProducts,
     };
 };
-// Monthly sales chart
 const getMonthlySales = async () => {
-    // Returns monthly revenue for last 12 months
     const result = await prisma_1.prisma.$queryRaw `
-      SELECT
-        TO_CHAR(DATE_TRUNC('month', "createdAt"), 'YYYY-MM') AS month,
-        SUM(total) AS revenue
-      FROM "Order"
-      WHERE "status" = 'DELIVERED'
-      GROUP BY month
-      ORDER BY month ASC
-    `;
+    SELECT 
+      TO_CHAR("createdAt", 'Mon YYYY') AS month,
+      SUM(total) AS revenue
+    FROM "Order"
+    WHERE "status" = 'DELIVERED'
+    GROUP BY month, DATE_TRUNC('month', "createdAt")
+    ORDER BY DATE_TRUNC('month', "createdAt") ASC
+    LIMIT 12
+  `;
     return result;
 };
-// Low stock products
 const getLowStockProducts = async () => {
-    const lowStock = await prisma_1.prisma.inventory.findMany({
-        where: { lowStock: true },
+    return await prisma_1.prisma.inventory.findMany({
+        where: {
+            quantity: {
+                lt: 10
+            }
+        },
         include: { product: true },
     });
-    return lowStock;
+};
+const getRecentOrders = async () => {
+    return await prisma_1.prisma.order.findMany({
+        take: 5,
+        orderBy: { createdAt: 'desc' },
+        include: {
+            user: {
+                select: { name: true, email: true }
+            }
+        }
+    });
 };
 exports.DashboardService = {
     getStats,
     getMonthlySales,
-    getLowStockProducts
+    getLowStockProducts,
+    getRecentOrders
 };

@@ -1,30 +1,65 @@
-Mom & Baby Wear Backend 👶👗
-This is the robust backend API for the Mom & Baby Wear e-commerce platform
-. Built with Node.js, Express, and Prisma ORM, it provides a secure and
-scalable foundation for managing
-products, categories, orders, and professional authentication.
+📌 Project Overview
+
+The Mom & Baby Wear Backend is developed using Node.js, Express.js, TypeScript, and Prisma ORM
+with PostgreSQL.
+It follows a modular, service-oriented architecture to ensure maintainability,
+scalability, and zero-issue deployment on production platforms.
 
 🚀 Key Features
-Secure Auth: Implements both Email/Password login and Google OAuth 2.0 integration.
 
-Token Management: Uses JWT (JSON Web Tokens) with HTTP-Only cookies for secure session handling.
+Secure Authentication
 
-ORM: Powered by Prisma with PostgreSQL (hosted on Neon) for efficient data modeling.
+Email & Password authentication
 
-Storage: Integrated with Cloudinary for high-performance product image hosting.
+Google OAuth 2.0 integration
 
-Role-Based Access Control (RBAC): Distinct permissions for ADMIN and CUSTOMER roles.
+Token Management
 
-Payment Gateway: Ready for Stripe and SSLCommerz payment processing.
+JWT-based authentication
 
-Validation: Robust data validation using Zod and centralized error management.
+HTTP-Only cookies for secure session handling
+
+Database & ORM
+
+PostgreSQL (Neon DB)
+
+Prisma ORM with migrations
+
+Image Storage
+
+Cloudinary integration for product images
+
+Role-Based Access Control (RBAC)
+
+Admin, Staff, Customer,Manager roles
+
+Route-level permission enforcement
+
+E-commerce Core
+
+Products, categories, cart, orders
+
+Inventory & stock logging
+
+Payments
+
+SSLCommerz
+
+Stripe ready
+
+Validation & Error Handling
+
+Zod-based request validation
+
+Centralized error handling system
 
 🛠 Tech Stack
+
 Runtime: Node.js (v18+)
 
 Framework: Express.js with TypeScript
 
-Database: PostgreSQL (Neon DB)
+Database: PostgreSQL (Neon)
 
 ORM: Prisma
 
@@ -32,78 +67,189 @@ Authentication: Google OAuth 2.0 & JWT
 
 Image Storage: Cloudinary
 
-Payment: SSLCommerz
+Payments: SSLCommerz / Stripe
+
+👥 User Roles & Permissions
+Role	Permissions
+Customer	Browse products, cart, checkout, reviews
+Staff	Inventory management, order processing
+Admin	Full access (users, products, orders, coupons, analytics)
+🏗️ API Architecture
+
+Modular architecture
+
+Controller → Service → Database pattern
+
+Centralized routing system
+
+Shared utilities and middleware
+
+🔁 Request Flow
+Client
+  → Route
+    → Auth / Validation Middleware
+      → Controller
+        → Service
+          → Prisma ORM
+            → PostgreSQL Database
 
 📁 Project Structure
 backend/
 ├── src/
-│ ├── app.ts # App initialization (Middlewares, CORS, COOP)
-│ ├── server.ts # Server entry point
-│ ├── config/ # Environment variables & configurations
-│ ├── utils/ # Shared utilities (ApiError, catchAsync)
-│ ├── middleware/ # Auth & Request validation logic
-│ ├── modules/ # Domain-driven feature modules (Auth, Products, etc.)
-│ ├── routes/ # Centralized API routing
-│ └── database/ # Prisma client instance
-├── prisma/ # Database schema and migrations
-└── .env # Environment configuration
+│   ├── app.ts        # App initialization (middlewares, CORS, COOP)
+│   ├── server.ts     # Server entry point
+│   ├── config/       # Environment & service configuration
+│   ├── utils/        # ApiError, catchAsync, helpers
+│   ├── middleware/   # Auth & request validation
+│   ├── modules/      # Feature modules (auth, users, products, etc.)
+│   ├── routes/       # Centralized API routing
+│   └── database/     # Prisma client instance
+├── prisma/
+│   ├── schema.prisma
+│   └── migrations/
+└── .env
+
+📦 Backend Modules (Feature Coverage)
+
+Authentication & Authorization
+
+User & Role Management
+
+Product & Category Management
+
+Cart & Order Management
+
+Inventory & Stock Logs
+
+Coupons & Discounts
+
+Reviews & Ratings
+
+Payments (SSLCommerz / Stripe)
+
+Dashboard Analytics
+
+AI-powered Features
+
+Contact & Admin Settings
+
+📄 Pagination & Filtering
+
+Query-based pagination (page, limit)
+
+Dynamic filtering using Prisma
+
+Sorting by price, date, and relevance
+
+🧪 Validation Strategy
+
+Zod schemas for all request payloads
+
+Centralized request validation middleware
+
+Consistent validation error responses
+
+❌ Error Handling Strategy
+
+Custom ApiError class
+
+Global error handler
+
+Unified error response format for all APIs
 
 🌐 Environment Variables
-To run this project, you will need to add the following variables to your .env file:
+
+Create a .env file in the root directory:
 
 PORT=5000
-DATABASE_URL="your_neon_postgresql_url"
-JWT_SECRET="your_jwt_secret"
-GOOGLE_CLIENT_ID="your_google_client_id"
-GOOGLE_CLIENT_SECRET="your_google_client_secret"
-CLOUDINARY_CLOUD_NAME="your_cloud_name"
-CLOUDINARY_API_KEY="your_api_key"
-CLOUDINARY_API_SECRET="your_api_secret"
-FRONTEND_URL="https://mom-baby-wear-frontend.vercel.app"
+DATABASE_URL=your_neon_postgresql_url
+JWT_SECRET=your_jwt_secret
+
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+
+STRIPE_SECRET_KEY=your_stripe_secret_key
+
+FRONTEND_URL=https://mom-baby-wear-frontend.vercel.app
 
 ⚙️ Installation & Setup
-Clone the Repository
+
+Clone the repository:
 
 git clone https://github.com/SHARIFA-AKHTER/mom-baby-wear-backend.git
-
 cd mom-baby-wear-backend
-Install Dependencies:
+
+
+Install dependencies:
 
 npm install
 
-Database Migration:
+
+Database setup:
+
 npx prisma generate
 npx prisma migrate dev
 
-Run the Server:
+
+Run the development server:
+
 npm run dev
 
-📡 API Endpoints
 
-Module, Base Path, Description
-Auth  /auth  "Handles User Registration, Login, and Google OAuth."
-User   /user  Manage user profiles and roles.
-Product  /product  "Product listing, details, and management."
-Category   /category   Category-wise product organization.
-Cart   /cart   Shopping cart management for customers.
-Order   /order    Order placement and tracking.
-Payments    /payments  Handles Stripe and SSLCommerz payment flows.
-Dashboard   /dashboard  Analytics and statistics for Admin/Staff.
-Inventory  /inventory  Manage product stock and availability.
-Coupon    /coupon  Discount and promotional coupon management.
-Review   /review   Product ratings and user feedback.
-Wishlist   /wishlist  Manage users' saved/favorite products.
-AI  /ai  "AI-powered features (e.g., smart recommendations)."
-Contact  /contact   Customer support and contact form inquiries.
-Admin Settings   /adminSettings   General site-wide configurations for admins.
-Stock Log   /stockLog   Tracking history of stock changes and updates.
+Production build:
 
-🛡️ Security Implementation
-The API is configured with specific headers to handle cross-origin authentication
-on platforms like Vercel:
+npm run build
+npm start
 
-CORS: Enabled with credentials: true for secure cookie exchange.
+📡 API Endpoints Overview
+Module	Base Path	Description
+Auth	/auth	Login, register, Google OAuth
+User	/user	User profiles & roles
+Product	/product	Product CRUD
+Category	/category	Category management
+Cart	/cart	Shopping cart
+Order	/order	Orders & tracking
+Payments	/payments	SSLCommerz / Stripe
+Dashboard	/dashboard	Analytics & stats
+Inventory	/inventory	Stock management
+Coupon	/coupon	Discount system
+Review	/review	Ratings & reviews
+Wishlist	/wishlist	Saved products
+AI	/ai	Smart recommendations
+Contact	/contact	Customer support
+Admin Settings	/adminSettings	Site configuration
+Stock Log	/stockLog	Stock history
+Newsletter   /newsletter customer History
+🔐 Security Implementation
 
-COOP: Configured for Google Login popup compatibility (same-origin-allow-popups).
+JWT authentication with HTTP-Only cookies
 
-SameSite Cookies: Tokens are set with SameSite=None and Secure flags for cross-domain support.
+Role-based authorization middleware
+
+Secure CORS configuration with credentials
+
+COOP enabled for Google OAuth popup support
+
+SameSite=None & Secure cookie flags
+
+☁️ Deployment Notes
+
+Backend Hosting: Render
+
+Database: Neon PostgreSQL
+
+Frontend: Vercel
+
+Environment variables securely managed
+
+Prisma migrations deployed using prisma migrate deploy
+
+🌍 Live Deployment
+
+Backend API: https://mom-baby-wear-backend.vercel.app
+
+Frontend: https://mom-baby-wear-frontend.vercel.app

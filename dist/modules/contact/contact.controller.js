@@ -6,6 +6,7 @@ const catchAsync_1 = require("../../utils/catchAsync");
 const sendResponse_1 = require("../../utils/sendResponse");
 const createMessage = (0, catchAsync_1.catchAsync)(async (req, res) => {
     const result = await contact_service_1.ContactService.createMessage(req.body);
+    console.log("Service Result:", result);
     (0, sendResponse_1.sendResponse)(res, 201, true, 'Message sent successfully!', result);
 });
 const getAllMessages = (0, catchAsync_1.catchAsync)(async (req, res) => {

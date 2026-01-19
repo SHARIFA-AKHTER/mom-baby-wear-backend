@@ -1,8 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CouponService = void 0;
+const client_1 = require("@prisma/client");
 const prisma_1 = require("../../app/shared/prisma");
 const ApiError_1 = require("../../utils/ApiError");
+const paginationHelper_1 = require("../../utils/paginationHelper");
 const createCoupon = async (payload) => {
     const exist = await prisma_1.prisma.coupon.findUnique({
         where: { code: payload.code },
@@ -12,10 +14,26 @@ const createCoupon = async (payload) => {
     const result = await prisma_1.prisma.coupon.create({ data: payload });
     return result;
 };
-const getAllCoupons = async () => {
-    return prisma_1.prisma.coupon.findMany({
-        orderBy: { createdAt: "desc" },
+const getAllCoupons = async (filters, options) => {
+    const { limit, page, skip, sortBy, sortOrder } = paginationHelper_1.paginationHelper.calculatePagination(options);
+    const { searchTerm, ...filterData } = filters;
+    const andConditions = [];
+    if (searchTerm) {
+        andConditions.push({
+            OR: [
+                { code: { contains: searchTerm, mode: client_1.Prisma.QueryMode.insensitive } },
+            ],
+        });
+    }
+    const whereConditions = andConditions.length > 0 ? { AND: andConditions } : {};
+    const result = await prisma_1.prisma.coupon.findMany({
+        where: whereConditions,
+        skip,
+        take: limit,
+        orderBy: { [sortBy]: sortOrder },
     });
+    const total = await prisma_1.prisma.coupon.count({ where: whereConditions });
+    return { meta: { page, limit, total }, result };
 };
 const getSingleCoupon = async (id) => {
     const coupon = await prisma_1.prisma.coupon.findUnique({ where: { id } });
